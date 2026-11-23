@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} — AURX.WEAR{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    
+    <!-- Breadcrumb Path -->
+    <nav class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 mb-8">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <span class="text-neutral-600">/</span>
+        <a href="/?category={{ product.category }}#shop" class="hover:text-white transition">{{ product.category }}</a>
+        <span class="text-neutral-600">/</span>
+        <span class="text-white truncate">{{ product.title }}</span>
+    </nav>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        
+        <!-- Images Column (Left) -->
+        <div class="lg:col-span-7 space-y-4">
+            
+            <!-- Main Featured Image -->
+            <div class="aspect-[4/5] bg-black rounded-3xl overflow-hidden border border-aurx-border relative shadow-2xl">
+                <img 
+                    id="pageMainImage" 
+                    src="{{ product.primary_image }}" 
+                    alt="{{ product.title }}" 
+                    class="w-full h-full object-cover transition-all duration-500"
+                    fetchpriority="high"
+                    decoding="async"
+                >
+                {% if product.badge %}
+                <span class="absolute top-4 left-4 px-3 py-1 bg-white text-black text-xs font-heading font-black uppercase tracking-widest rounded-md shadow-xl">
+                    {{ product.badge }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Thumbnail Selector (if multiple images) -->
+            {% if product.image_list and product.image_list|length > 1 %}
+            <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                {% for img in product.image_list %}
+                <button 
+                    type="button" 
+                    onclick="document.getElementById('pageMainImage').src = '{{ img }}'"
+                    class="w-20 h-24 rounded-2xl overflow-hidden border border-aurx-border focus:border-white shrink-0 hover:opacity-80 transition bg-black"
+                >
+                    <img src="{{ img }}" alt="" class="w-full h-full object-cover">
+                </button>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Details Column (Right) -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-8">
+            <div class="space-y-6">
+                
+                <div class="space-y-2">
+                    <span class="text-xs font-mono uppercase tracking-[0.2em] text-neutral-400 font-bold block">
+                        {{ product.category }}
+                    </span>
+                    <h1 class="font-heading font-black text-3xl sm:text-4xl text-white uppercase tracking-tight leading-tight">
+                        {{ product.title }}
+                    </h1>
+                </div>
+
+                <!-- Price Row -->
+                <div class="flex items-baseline gap-4 py-4 border-y border-aurx-border">
+                    <span class="font-heading font-black text-3xl sm:text-4xl text-white">
+                        {{ settings.currency_symbol }}{{ product.price }}
+                    </span>
+                    {% if product.original_price and product.original_price > product.price %}
+                    <span class="text-lg font-mono text-neutral-500 line-through">
+                        {{ settings.currency_symbol }}{{ product.original_price }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Size Selector -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-mono uppercase tracking-wider text-neutral-300 font-bold">
+                            Select Size: <span id="detailSelectedSize" class="text-white font-bold">{{ product.size_list[0] if product.size_list else 'Standard' }}</span>
+                        </label>
+                        <span class="text-xs font-mono text-neutral-500">True Oversized Fit</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2.5">
+                        {% for sz in product.size_list %}
+                        <button 
+                            type="button" 
+                            onclick="selectDetailPageSize('{{ sz }}', this)" 
+                            class="size-pill min-w-[50px] py-2 px-3 text-xs font-mono font-bold rounded-xl border border-aurx-border bg-aurx-card hover:border-white transition {% if loop.first %}bg-white text-black border-white{% else %}text-white{% endif %}"
+                        >
+                            {{ sz }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Primary Action CTA -->
+                <div class="pt-4 space-y-3">
+                    {% if product.in_stock == 1 %}
+                    <button 
+                        type="button" 
+                        onclick="orderFromDetailPage()"
+                        class="w-full py-4 px-6 rounded-2xl bg-white hover:bg-neutral-200 text-black font-heading font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-2xl transition hover:scale-[1.01] active:scale-95"
+                    >
+                        <i class="fa-brands fa-whatsapp text-2xl text-emerald-600"></i>
+                        <span>Order Now on WhatsApp</span>
+                    </button>
+                    {% else %}
+                    <button 
+                        type="button" 
+                        disabled
+                        class="w-full py-4 px-6 rounded-2xl bg-neutral-900 text-neutral-600 font-heading font-black text-sm uppercase tracking-wider cursor-not-allowed text-center"
+                    >
+                        Sold Out / Currently Unavailable
+                    </button>
+                    {% endif %}
+
+                    <div class="flex items-center justify-between text-[11px] font-mono text-neutral-400 pt-3 border-t border-aurx-border">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck text-neutral-300"></i> Free Delivery</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield text-neutral-300"></i> 100% Safe</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-rotate-left text-neutral-300"></i> 7 Days Return</span>
+                    </div>
+                </div>
+
+                <!-- Product Specifications & Description -->
+                <div class="space-y-4 pt-6 border-t border-aurx-border">
+                    {% if product.description %}
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-mono uppercase tracking-wider font-bold text-white">Piece Details</h3>
+                        <p class="text-sm text-neutral-400 leading-relaxed">{{ product.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if product.fabric_details %}
+                    <div class="bg-aurx-card border border-aurx-border p-4 rounded-2xl space-y-1 font-mono">
+                        <h3 class="text-xs uppercase tracking-wider font-bold text-white">Fabric Specifications</h3>
+                        <p class="text-xs text-neutral-400 leading-relaxed">{{ product.fabric_details }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Related Drops Section -->
+    {% if related %}
+    <div class="mt-24 pt-12 border-t border-aurx-border">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="font-heading font-black text-2xl text-white uppercase tracking-tight">Complete The Look</h2>
+            <a href="/#shop" class="text-xs font-mono uppercase text-neutral-400 hover:text-white">View All &rarr;</a>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for r in related %}
+            <a href="/product/{{ r.slug }}" class="group bg-aurx-card border border-aurx-border rounded-2xl overflow-hidden hover:border-neutral-500 transition-all duration-300">
+                <div class="aspect-[4/5] bg-black overflow-hidden">
+                    <img src="{{ r.primary_image }}" alt="{{ r.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-4 space-y-1">
+                    <h3 class="font-heading font-bold text-white text-sm line-clamp-1 group-hover:text-neutral-300">{{ r.title }}</h3>
+                    <p class="font-heading font-black text-white text-sm">{{ settings.currency_symbol }}{{ r.price }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    let currentSelectedSize = "{{ product.size_list[0] if product.size_list else 'Standard' }}";
+    const productTitle = "{{ product.title | escape }}";
+    const productPrice = "{{ product.price }}";
+    const productUrl = window.location.href;
+    const whatsappNum = "{{ settings.whatsapp_number }}";
+
+    function selectDetailPageSize(sz, btn) {
+        currentSelectedSize = sz;
+        document.getElementById('detailSelectedSize').innerText = sz;
+        document.querySelectorAll('.size-pill').forEach(b => {
+            b.classList.remove('bg-white', 'text-black', 'border-white');
+            b.classList.add('text-white');
+        });
+        btn.classList.add('bg-white', 'text-black', 'border-white');
+        btn.classList.remove('text-white');
+    }
+
+    function orderFromDetailPage() {
+        const text = `👋 Hello {{ settings.store_name }}!%0A%0AI want to order this item:%0A👕 *Product:* ${encodeURIComponent(productTitle)}%0A📏 *Size:* ${encodeURIComponent(currentSelectedSize)}%0A💰 *Price:* {{ settings.currency_symbol }}${productPrice}%0A🔗 *Product Link:* ${encodeURIComponent(productUrl)}%0A%0APlease let me know how to proceed with payment and delivery!`;
+        
+        // Track lead asynchronously without blocking user navigation
+        try {
+            const leadPayload = JSON.stringify({
+                channel: 'Product Detail Page WhatsApp Order',
+                product_title: productTitle,
+                message: `Size: ${currentSelectedSize}, Price: {{ settings.currency_symbol }}${productPrice}`
+            });
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/track-lead', new Blob([leadPayload], { type: 'application/json' }));
+            } else {
+                fetch('/api/track-lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: leadPayload, keepalive: true }).catch(() => {});
+            }
+        } catch (e) {}
+
+        if (typeof openWhatsAppDirectly === 'function') {
+            openWhatsAppDirectly(whatsappNum, text);
+        } else {
+            const cleanNum = (whatsappNum || '917851891611').toString().replace(/\D/g, '');
+            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+            const waUrl = `https://api.whatsapp.com/send?phone=${cleanNum}&text=${text}`;
+            if (isMobile) {
+                window.location.href = waUrl;
+            } else {
+                window.open(waUrl, '_blank', 'noopener,noreferrer');
+            }
+        }
+    }
+</script>
+{% endblock %}

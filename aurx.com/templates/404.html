@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}404 — Page Not Found // AURX.WEAR{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center px-4 py-20">
+    <div class="max-w-md w-full text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 font-mono text-xs uppercase tracking-widest">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            <span>Error 404</span>
+        </div>
+        
+        <h1 class="font-heading font-black text-5xl sm:text-6xl text-white uppercase tracking-tight">
+            LOST IN THE VOID
+        </h1>
+        
+        <p class="text-neutral-400 text-sm leading-relaxed font-normal">
+            The drop or page you are looking for has been moved, archived, or doesn't exist.
+        </p>
+        
+        <div class="pt-4 flex items-center justify-center gap-4">
+            <a 
+                href="/" 
+                class="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl"
+            >
+                <span>Back to Home</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+            <a 
+                href="/#shop" 
+                class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent border border-neutral-700 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-white transition"
+            >
+                Explore Drops
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
