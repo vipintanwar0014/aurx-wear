@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}About Us // Luxury Heavyweight Streetwear — AURX.WEAR{% endblock %}
+
+{% block content %}
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-16">
+    
+    <!-- Minimalist Breadcrumb -->
+    <nav class="flex items-center gap-2 text-[11px] sm:text-xs font-mono uppercase tracking-wider text-neutral-400 mb-6 sm:mb-10">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <span class="text-neutral-600">/</span>
+        <span class="text-white font-semibold">About Us</span>
+    </nav>
+
+    <!-- Editorial Hero Showcase -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-6 sm:gap-8 lg:gap-14 mb-10 sm:mb-20">
+        
+        <!-- Left: Macro Craftsmanship Photo -->
+        <div class="lg:col-span-6 rounded-2xl sm:rounded-3xl overflow-hidden bg-black shadow-2xl border border-white/[0.08] aspect-[4/3] sm:aspect-[5/4] relative group">
+            <img 
+                src="/static/images/about_collar_ultra_hd.jpg" 
+                alt="AURX Streetwear Craftsmanship" 
+                class="w-full h-full object-cover filter contrast-110 brightness-105 group-hover:scale-105 transition-transform duration-700 ease-out" 
+                fetchpriority="high"
+                decoding="async"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+            <div class="absolute bottom-3.5 left-3.5 sm:bottom-6 sm:left-6 right-3.5">
+                <span class="text-[9.5px] sm:text-xs font-mono uppercase tracking-[0.25em] text-emerald-400 font-bold block mb-1">
+                    ATELIER STANDARD // 400 GSM
+                </span>
+                <p class="font-heading font-black text-xs sm:text-lg text-white uppercase tracking-tight">
+                    Engineered Precision & Heavy Thermal Weave
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: Authentic Fashion Narrative -->
+        <div class="lg:col-span-6 space-y-4 sm:space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-neutral-300 font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>BRAND MANIFESTO</span>
+            </div>
+
+            <h1 class="font-heading font-black text-2xl sm:text-5xl lg:text-6xl text-white uppercase tracking-tight leading-tight">
+                MORE THAN JUST CLOTHES.
+            </h1>
+
+            <p class="font-heading font-extrabold text-xs sm:text-base text-neutral-400 uppercase tracking-widest">
+                WEAR MORE. STAND OUT.
+            </p>
+
+            <p class="text-neutral-300 text-xs sm:text-base leading-relaxed font-normal">
+                AURX.WEAR is a high-fashion streetwear label built for the bold, the confident, and the ones who never settle. Born out of an obsession with custom heavyweight textures, tailored drop-shoulder cuts, and signature metallic chrome aesthetics.
+            </p>
+
+            <p class="text-neutral-400 text-xs sm:text-sm leading-relaxed font-normal">
+                Every drop is manufactured in limited batches using 380 to 400 GSM custom combed cotton thermal weaves, reactive dye treatments, and hand-finished acid distressing. We reject flimsy fast-fashion — every piece is engineered to hold its weight, shape, and attitude for years.
+            </p>
+
+            <div class="pt-2 sm:pt-4 flex items-center gap-3">
+                <a 
+                    href="/#shop" 
+                    class="flex-1 sm:flex-initial text-center px-6 sm:px-9 py-3 sm:py-3.5 rounded-full bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl hover:scale-[1.02] active:scale-95 inline-flex items-center justify-center gap-2"
+                >
+                    <span>Shop Drops</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+                <a 
+                    href="/#categories" 
+                    class="flex-1 sm:flex-initial text-center px-5 sm:px-8 py-3 sm:py-3.5 rounded-full bg-transparent border border-neutral-700 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-white transition hover:scale-[1.02] active:scale-95"
+                >
+                    <span>Collections</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3 Pillars of AURX -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 mb-10 sm:mb-20">
+        
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Heavyweight Thermal Weaves
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Constructed with 380-400 GSM pure combed waffle cotton. Dense, breathable, and structured with unmatched hand-feel.
+            </p>
+        </div>
+
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-cube"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Architectural Drop Silhouette
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Engineered boxy drape with lowered armholes and widened torso proportions designed to flatter every body type.
+            </p>
+        </div>
+
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-spray-can"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Acid Distressing & Graphics
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Hand-washed vintage mineral treatments paired with high-density screenprinted graphics and metallic accents.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Direct Concierge Banner (Clean, Professional, No Phone Number Displayed) -->
+    <div class="bg-gradient-to-b sm:bg-gradient-to-r from-[#111116] via-[#16161D] to-[#111116] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center max-w-3xl mx-auto shadow-2xl space-y-3.5 sm:space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-emerald-400 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>DIRECT ATELIER CONCIERGE</span>
+        </div>
+        <h2 class="font-heading font-black text-xl sm:text-3xl lg:text-4xl text-white uppercase tracking-tight">
+            BESPOKE SIZING & ATELIER ASSISTANCE
+        </h2>
+        <p class="text-neutral-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+            Have questions about fit, fabric weight, or upcoming drops? Connect directly with our atelier team on WhatsApp for instant assistance.
+        </p>
+        <div class="pt-2 flex justify-center">
+            <a 
+                href="https://api.whatsapp.com/send?phone={{ settings.whatsapp_number }}&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry%20regarding%20products."
+                onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }"
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all duration-300 active:scale-95 hover:scale-[1.02] cursor-pointer"
+            >
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Chat on WhatsApp</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

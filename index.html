@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden max-w-[100vw]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>AURX.WEAR — Wear More. Stand Out.</title>
+    <meta name="description" content="AURX.WEAR - Premium Fashion. Premium You. Heavyweight Streetwear & Luxury Essentials.">
+    
+    <!-- Google Fonts: Montserrat + Inter + Syne -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        aurx: {
+                            black: '#0A0A0C',
+                            dark: '#0E0E12',
+                            card: '#121216',
+                            cardHover: '#18181E',
+                            border: '#222228',
+                            borderLight: 'rgba(255, 255, 255, 0.12)',
+                            whatsapp: '#25D366'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="static/css/custom.css?v=4">
+</head>
+<body class="bg-aurx-black text-white font-sans antialiased min-h-screen flex flex-col selection:bg-white selection:text-black overflow-x-hidden w-full max-w-[100vw]">
+
+    <!-- Main Navigation Bar (Unified Fixed Layout - 100% Stable on Scroll) -->
+    <header id="siteHeader" class="fixed top-0 left-0 right-0 z-40 glossy-header transition-all duration-300">
+        <div class="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 h-12 sm:h-16 flex items-center justify-between gap-3 sm:gap-6">
+            
+            <!-- Left: Brand Logo (Exact Mockup Match) -->
+            <a href="/" class="flex items-center gap-3 group shrink-0">
+                <div class="h-8 sm:h-12 w-auto flex items-center">
+                    <img src="static/images/navbar_logo_hd.png" alt="AURX WEAR" class="h-7 sm:h-11 w-auto object-contain filter brightness-110">
+                </div>
+            </a>
+
+            <!-- Center: Navigation Links (Visible on Tablet & Desktop) -->
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium tracking-wide">
+                <a href="/" class="text-white hover:text-white transition pb-1 font-semibold">Home</a>
+                <a href="/#shop" class="text-neutral-400 hover:text-white transition pb-1">Shop</a>
+                <a href="/#categories" class="text-neutral-400 hover:text-white transition pb-1">Collections</a>
+                <a href="/about" class="text-neutral-400 hover:text-white transition pb-1">About</a>
+                <a href="/#contact" onclick="if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="text-neutral-400 hover:text-white transition pb-1">Contact</a>
+            </nav>
+
+            <!-- Right: Search Bar, Profile, Cart, Mobile Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+                
+                <!-- Search Bar -->
+                <form action="/#shop" method="GET" class="relative hidden sm:block w-40 md:w-56">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        value="" 
+                        placeholder="Search products..." 
+                        class="w-full bg-[#131317] border border-aurx-border rounded-full py-2 pl-9 pr-4 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-400 transition"
+                    >
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-neutral-500 text-xs"></i>
+                </form>
+
+                <!-- Profile / Admin Portal -->
+                <a 
+                    href="admin.html" 
+                    title="Owner / Admin Portal" 
+                    class="w-8 h-8 sm:w-9 sm:h-9 rounded-full hover:bg-neutral-900 border border-transparent hover:border-aurx-border flex items-center justify-center text-neutral-300 hover:text-white transition"
+                >
+                    <i class="fa-regular fa-user text-xs sm:text-sm"></i>
+                </a>
+
+                <!-- Shopping Bag Icon (Untouchable / Display Only - No Click Action) -->
+                <div 
+                    title="Cart (Empty)" 
+                    class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-transparent flex items-center justify-center text-neutral-400 cursor-default select-none pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <i class="fa-solid fa-bag-shopping text-xs sm:text-sm"></i>
+                    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white text-black font-bold text-[8px] sm:text-[9px] flex items-center justify-center">
+                        0
+                    </span>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <button 
+                    type="button" 
+                    onclick="toggleMobileNav()"
+                    class="md:hidden w-8 h-8 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-white"
+                    aria-label="Toggle navigation"
+                >
+                    <i id="mobileMenuIcon" class="fa-solid fa-bars text-xs"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Mobile Quick Subnav Bar (Always visible & stable on iPhone 15 / Mobile) -->
+        <nav id="mobileSubnavBar" class="md:hidden flex items-center justify-around px-3 py-2 border-t border-white/[0.08] bg-black/95 text-[10.5px] font-heading font-bold uppercase tracking-wider">
+            <a href="/" class="text-white hover:text-neutral-300 transition py-0.5">Home</a>
+            <a href="/#categories" class="text-neutral-400 hover:text-white transition py-0.5">Collections</a>
+            <a href="/#shop" class="text-neutral-400 hover:text-white transition py-0.5">Shop</a>
+            <a href="/about" class="text-neutral-400 hover:text-white transition py-0.5">About</a>
+            <a href="/#contact" onclick="if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="text-neutral-400 hover:text-white transition py-0.5">Contact</a>
+        </nav>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileNavMenu" class="hidden md:hidden border-t border-aurx-border/80 bg-black/95 px-5 py-4 space-y-3">
+            <a href="/" onclick="toggleMobileNav()" class="block text-white font-semibold text-sm">Home</a>
+            <a href="/#categories" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">Collections</a>
+            <a href="/#shop" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">Shop</a>
+            <a href="/about" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">About Us</a>
+            <a href="/#contact" onclick="toggleMobileNav(); if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="block text-neutral-400 hover:text-white text-sm">Contact Us</a>
+        </div>
+    </header>
+
+    <script>
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobileNavMenu');
+            const icon = document.getElementById('mobileMenuIcon');
+            const subnav = document.getElementById('mobileSubnavBar');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (subnav) subnav.classList.add('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                if (subnav) subnav.classList.remove('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+    </script>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-[78px] md:pt-16">
+        
+
+<!-- Hero Banner (100% Exact Laptop Banner, Mobile & Desktop Pixel-Fit) -->
+<section class="relative w-full overflow-hidden bg-black border-b border-white/[0.08] select-none">
+    
+    <div class="relative w-full aspect-[2048/650] overflow-hidden bg-black flex items-center justify-center">
+        
+        <!-- Exact Laptop Banner Photo: Fits Mobile and Laptop at 100% full width with zero cropping -->
+        <img 
+            src="static/images/hero_exact_final.jpg?v=2" 
+            alt="AURX.WEAR — Wear More. Stand Out." 
+            class="w-full h-full object-cover object-center filter brightness-105 contrast-105"
+            id="heroImage"
+            fetchpriority="high"
+            decoding="async"
+        >
+
+        <!-- Interactive Clickable Hotspot over "Shop Now →" Button -->
+        <a 
+            href="#shop" 
+            class="absolute z-20 cursor-pointer rounded-full transition-all duration-300 hover:ring-2 hover:ring-white/50 active:scale-95 group"
+            style="left: 7%; top: 66%; width: 14.8%; height: 9.5%;"
+            title="Explore Collection"
+        >
+            <span class="sr-only">Shop Now</span>
+        </a>
+
+        <!-- Secondary Hotspot on Left Text Area for Frictionless Navigation -->
+        <a 
+            href="#shop" 
+            class="absolute inset-y-0 left-0 w-2/5 z-10 cursor-pointer"
+            title="Explore Collection"
+        ></a>
+
+        <!-- Interactive Hotspot for Integrated Trust Features (Smooth Scroll to About/Trust Section on desktop, /about on mobile) -->
+        <a 
+            href="/about" 
+            onclick="if (window.innerWidth >= 768) { const el = document.getElementById('about'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } }"
+            class="absolute z-20 cursor-pointer"
+            style="left: 3%; bottom: 1.5%; width: 45%; height: 14%;"
+            title="Free Shipping, Secure Payments & 7-Day Returns"
+        ></a>
+
+    </div>
+
+</section>
+
+<!-- SHOP BY CATEGORY SECTION (Single Line Continuous Smooth Marquee) -->
+<style>
+    @keyframes categoryMarqueeAnim {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+        100% {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+    .category-marquee-track {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        width: max-content !important;
+        will-change: transform;
+        animation: categoryMarqueeAnim 32s linear infinite !important;
+    }
+    .category-marquee-track:hover,
+    .category-marquee-track:active {
+        animation-play-state: paused !important;
+    }
+</style>
+<section id="categories" class="scroll-mt-20 w-full max-w-[100vw] overflow-x-hidden min-w-0 py-8 sm:py-12 border-b border-white/[0.08] relative select-none">
+    
+    <!-- Centered Header with Thin Horizontal Lines (Exact Mockup Match) -->
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-5 sm:mb-7 flex items-center justify-center gap-3 sm:gap-4">
+        <span class="w-8 sm:w-24 h-[1px] bg-neutral-800"></span>
+        <h2 class="font-heading font-extrabold text-[11px] sm:text-sm tracking-[0.2em] sm:tracking-[0.25em] text-white uppercase text-center">
+            SHOP BY CATEGORY
+        </h2>
+        <span class="w-8 sm:w-24 h-[1px] bg-neutral-800"></span>
+    </div>
+
+    <!-- Soft Edge Vignette Fades for Seamless Infinite Illusion (Mobile Only) -->
+    <div class="md:hidden pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[#0A0A0C] via-[#0A0A0C]/80 to-transparent z-10"></div>
+    <div class="md:hidden pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#0A0A0C] via-[#0A0A0C]/80 to-transparent z-10"></div>
+
+    <!-- Mobile View (md:hidden): Single Line Continuous Smooth Marquee Slider -->
+    <div class="md:hidden w-full max-w-full overflow-x-hidden min-w-0 relative">
+        <div class="category-marquee-track flex gap-4 w-max">
+            
+            <!-- Category 1: T-SHIRTS -->
+            <a href="/?category=Oversized+T-Shirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_tshirts_hd.jpg?v=aurx2" alt="T-Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">T-SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 2: HOODIES -->
+            <a href="/?category=Hoodies+%26+Sweatshirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_hoodies_hd.jpg?v=black_aurx_hoodie_v4" alt="Hoodies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">HOODIES & SWEATSHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 3: SHIRTS -->
+            <a href="/?category=Acid+Wash+%26+Vintage#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_shirts_hd.jpg?v=aurx2" alt="Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 4: PANTS -->
+            <a href="/?category=Cargo+%26+Parachute+Pants#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_pants_hd.jpg?v=aurx2" alt="Pants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">PANTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Category 1: T-SHIRTS -->
+            <a href="/?category=Oversized+T-Shirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_tshirts_hd.jpg?v=aurx2" alt="T-Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">T-SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 2: HOODIES -->
+            <a href="/?category=Hoodies+%26+Sweatshirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_hoodies_hd.jpg?v=black_aurx_hoodie_v4" alt="Hoodies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">HOODIES & SWEATSHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 3: SHIRTS -->
+            <a href="/?category=Acid+Wash+%26+Vintage#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_shirts_hd.jpg?v=aurx2" alt="Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 4: PANTS -->
+            <a href="/?category=Cargo+%26+Parachute+Pants#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_pants_hd.jpg?v=aurx2" alt="Pants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">PANTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Category 1: T-SHIRTS -->
+            <a href="/?category=Oversized+T-Shirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_tshirts_hd.jpg?v=aurx2" alt="T-Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">T-SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 2: HOODIES -->
+            <a href="/?category=Hoodies+%26+Sweatshirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_hoodies_hd.jpg?v=black_aurx_hoodie_v4" alt="Hoodies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">HOODIES & SWEATSHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 3: SHIRTS -->
+            <a href="/?category=Acid+Wash+%26+Vintage#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_shirts_hd.jpg?v=aurx2" alt="Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 4: PANTS -->
+            <a href="/?category=Cargo+%26+Parachute+Pants#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_pants_hd.jpg?v=aurx2" alt="Pants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">PANTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Category 1: T-SHIRTS -->
+            <a href="/?category=Oversized+T-Shirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_tshirts_hd.jpg?v=aurx2" alt="T-Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">T-SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 2: HOODIES -->
+            <a href="/?category=Hoodies+%26+Sweatshirts#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_hoodies_hd.jpg?v=black_aurx_hoodie_v4" alt="Hoodies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">HOODIES & SWEATSHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 3: SHIRTS -->
+            <a href="/?category=Acid+Wash+%26+Vintage#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_shirts_hd.jpg?v=aurx2" alt="Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">SHIRTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 4: PANTS -->
+            <a href="/?category=Cargo+%26+Parachute+Pants#shop" class="group shrink-0 w-48 glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-lg hover:-translate-y-1">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_pants_hd.jpg?v=aurx2" alt="Pants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-3.5">
+                    <h3 class="font-heading font-black text-xs text-white uppercase tracking-wider">PANTS</h3>
+                    <span class="text-[11px] text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- Desktop / Laptop View (hidden md:block): Original 4-Column Grid -->
+    <div class="hidden md:block max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-4 gap-6">
+            <!-- Category 1: T-SHIRTS -->
+            <a href="/?category=Oversized+T-Shirts#shop" class="group glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-xl hover:-translate-y-1.5">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_tshirts_hd.jpg?v=aurx2" alt="T-Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-heading font-black text-sm text-white uppercase tracking-wider">T-SHIRTS</h3>
+                    <span class="text-xs text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 2: HOODIES -->
+            <a href="/?category=Hoodies+%26+Sweatshirts#shop" class="group glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-xl hover:-translate-y-1.5">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_hoodies_hd.jpg?v=black_aurx_hoodie_v4" alt="Hoodies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-heading font-black text-sm text-white uppercase tracking-wider">HOODIES & SWEATSHIRTS</h3>
+                    <span class="text-xs text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 3: SHIRTS -->
+            <a href="/?category=Acid+Wash+%26+Vintage#shop" class="group glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-xl hover:-translate-y-1.5">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_shirts_hd.jpg?v=aurx2" alt="Shirts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-heading font-black text-sm text-white uppercase tracking-wider">SHIRTS</h3>
+                    <span class="text-xs text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Category 4: PANTS -->
+            <a href="/?category=Cargo+%26+Parachute+Pants#shop" class="group glossy-card shiny-sheen rounded-2xl overflow-hidden transition-all duration-300 block shadow-xl hover:-translate-y-1.5">
+                <div class="aspect-[4/3] bg-black overflow-hidden relative">
+                    <img src="static/images/cat_pants_hd.jpg?v=aurx2" alt="Pants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" decoding="async">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-heading font-black text-sm text-white uppercase tracking-wider">PANTS</h3>
+                    <span class="text-xs text-neutral-400 group-hover:text-white transition inline-flex items-center gap-1.5 mt-1 font-medium">
+                        <span>Shop Now</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT AURX.WEAR SECTION (Desktop / Laptop View: Original Luxury Editorial Between Categories & Featured Products) -->
+<section id="about" class="hidden md:block scroll-mt-20 border-t border-white/[0.08] bg-[#09090D] py-14 sm:py-20">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-12 items-center gap-10 lg:gap-14">
+            
+            <!-- Left: Macro Craftsmanship Photo -->
+            <div class="col-span-5 rounded-2xl overflow-hidden bg-black shadow-2xl border border-white/[0.08] aspect-[5/4]">
+                <img 
+                    src="static/images/about_collar_ultra_hd.jpg" 
+                    alt="AURX Craftsmanship" 
+                    class="w-full h-full object-cover filter contrast-110 brightness-105 hover:scale-105 transition-transform duration-700 ease-out" 
+                    loading="lazy" 
+                    decoding="async"
+                >
+            </div>
+
+            <!-- Vertical Separator Line -->
+            <div class="flex justify-center col-span-1">
+                <span class="w-[1px] h-36 bg-neutral-800"></span>
+            </div>
+
+            <!-- Right: Authentic Fashion Narrative -->
+            <div class="col-span-6 space-y-5">
+                <span class="text-xs font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold block">
+                    ABOUT AURX.WEAR
+                </span>
+                
+                <h2 class="font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-white uppercase tracking-tight leading-tight">
+                    MORE THAN JUST CLOTHES.
+                </h2>
+                
+                <p class="font-heading font-extrabold text-sm sm:text-base text-neutral-400 uppercase tracking-widest">
+                    WEAR MORE. STAND OUT.
+                </p>
+
+                <p class="text-neutral-400 text-sm sm:text-base leading-relaxed max-w-xl font-normal">
+                    AURX.WEAR is a high-fashion streetwear label built for the bold, the confident, and the ones who never settle. Defined by custom heavyweight fabrics, tailored drop-shoulder cuts, and signature metallic chrome aesthetics.
+                </p>
+
+                <div class="pt-3 flex flex-wrap items-center gap-4">
+                    <a 
+                        href="#shop" 
+                        class="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl hover:scale-[1.02] active:scale-95"
+                    >
+                        <span>Explore Drops</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                    
+                    <a 
+                        href="#contact" 
+                        onclick="const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; }"
+                        class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-transparent border border-neutral-700 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-white transition hover:scale-[1.02] active:scale-95"
+                    >
+                        <span>Contact Atelier</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- LIVE SHOPPING CATALOG (FEATURED PRODUCTS) -->
+<section id="shop" class="scroll-mt-20 max-w-[1440px] mx-auto px-2.5 sm:px-6 lg:px-8 py-8 sm:py-16 border-t border-white/[0.08] w-full min-w-0 overflow-hidden">
+    
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div>
+            <div class="flex items-center gap-2 text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400 font-bold uppercase mb-0.5 sm:mb-1">
+                <span>OUR DROPS</span>
+                <span class="w-6 sm:w-8 h-[1px] bg-neutral-600"></span>
+            </div>
+            <h2 class="font-heading font-black text-xl sm:text-3xl lg:text-4xl text-white uppercase tracking-tight">
+                FEATURED PRODUCTS
+            </h2>
+        </div>
+
+        <!-- Sort Selection -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <span class="text-[11px] sm:text-xs text-neutral-400 uppercase tracking-wider font-semibold">Sort:</span>
+            <select 
+                onchange="handleSortChange(this.value)"
+                class="bg-[#111115] border border-white/[0.08] text-white text-[11px] sm:text-xs rounded-lg sm:rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 focus:outline-none focus:border-white transition cursor-pointer"
+            >
+                <option value="featured" selected>Featured</option>
+                <option value="price_low" >Price: Low to High</option>
+                <option value="price_high" >Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Category Pill Filter (Horizontally scrollable with no document stretch) -->
+    <div class="w-full min-w-0 overflow-x-auto pb-3 sm:pb-3.5 mb-6 sm:mb-8 no-scrollbar">
+        <div class="inline-flex items-center gap-2 sm:gap-2.5 flex-nowrap">
+            <a 
+                href="/#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-white text-black shadow-lg shadow-white/10"
+            >
+                All Items
+            </a>
+            
+            
+            <a 
+                href="/?category=Oversized%20T-Shirts#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-[#111115] border border-white/[0.08] text-neutral-400 hover:text-white hover:border-neutral-500"
+            >
+                Oversized T-Shirts
+            </a>
+            
+            
+            
+            <a 
+                href="/?category=Hoodies%20%26%20Sweatshirts#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-[#111115] border border-white/[0.08] text-neutral-400 hover:text-white hover:border-neutral-500"
+            >
+                Hoodies &amp; Sweatshirts
+            </a>
+            
+            
+            
+            
+            
+            <a 
+                href="/?category=Cargo%20%26%20Parachute%20Pants#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-[#111115] border border-white/[0.08] text-neutral-400 hover:text-white hover:border-neutral-500"
+            >
+                Cargo &amp; Parachute Pants
+            </a>
+            
+            
+            
+            <a 
+                href="/?category=Jackets%20%26%20Outerwear#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-[#111115] border border-white/[0.08] text-neutral-400 hover:text-white hover:border-neutral-500"
+            >
+                Jackets &amp; Outerwear
+            </a>
+            
+            
+            
+            <a 
+                href="/?category=Caps%20%26%20Accessories#shop" 
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-heading font-bold uppercase tracking-wider whitespace-nowrap transition shrink-0 bg-[#111115] border border-white/[0.08] text-neutral-400 hover:text-white hover:border-neutral-500"
+            >
+                Caps &amp; Accessories
+            </a>
+            
+            
+        </div>
+    </div>
+
+    <!-- Active Search Filter Badge -->
+    
+
+    <!-- Products Grid -->
+    
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('14')">
+                
+                <img 
+                    src="static/uploads/aurx_acid_cross_grey.jpg" 
+                    alt="AURX Acid Cross Heavy Thermal - Heather Grey" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        SIGNATURE
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('14')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('14')">
+                        AURX Acid Cross Heavy Thermal - Heather Grey
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1599
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹3199
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('14', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('14', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('14', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('14', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Acid Cross Heavy Thermal - Heather Grey', '1599', 'M', 'aurx-acid-cross-heavy-thermal-heather-grey', '14')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('13')">
+                
+                <img 
+                    src="static/uploads/aurx_warstudios_skull_charcoal.jpg" 
+                    alt="AURX Warstudios Dagger Skull Thermal - Charcoal" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        EXCLUSIVE
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('13')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('13')">
+                        AURX Warstudios Dagger Skull Thermal - Charcoal
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1599
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹3199
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('13', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('13', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('13', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('13', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Warstudios Dagger Skull Thermal - Charcoal', '1599', 'M', 'aurx-warstudios-dagger-skull-thermal-charcoal', '13')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('12')">
+                
+                <img 
+                    src="static/uploads/aurx_misery_racing_white.jpg" 
+                    alt="AURX Misery Club Racing Thermal - Optic White" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        MOTORSPORT
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('12')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('12')">
+                        AURX Misery Club Racing Thermal - Optic White
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1499
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹2999
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('12', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('12', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('12', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('12', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Misery Club Racing Thermal - Optic White', '1499', 'M', 'aurx-misery-club-racing-thermal-optic-white', '12')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('11')">
+                
+                <img 
+                    src="static/uploads/aurx_praying_hands_red.jpg" 
+                    alt="AURX Praying Hands Rosary Thermal - Crimson Red" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        LIMITED DROP
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('11')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('11')">
+                        AURX Praying Hands Rosary Thermal - Crimson Red
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1599
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹3199
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('11', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('11', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('11', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('11', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Praying Hands Rosary Thermal - Crimson Red', '1599', 'M', 'aurx-praying-hands-rosary-thermal-crimson-red', '11')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('10')">
+                
+                <img 
+                    src="static/uploads/aurx_gothic_cross_maroon.jpg" 
+                    alt="AURX Gothic Cross 777 Thermal - Deep Maroon" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        NEW DROP
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('10')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('10')">
+                        AURX Gothic Cross 777 Thermal - Deep Maroon
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1499
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹2999
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('10', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('10', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('10', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('10', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Gothic Cross 777 Thermal - Deep Maroon', '1499', 'M', 'aurx-gothic-cross-777-thermal-deep-maroon', '10')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('9')">
+                
+                <img 
+                    src="static/uploads/aurx_duende_dragon_cream.jpg" 
+                    alt="AURX Duende Axolotl Thermal - Ecru Cream" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        TRENDING
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('9')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('9')">
+                        AURX Duende Axolotl Thermal - Ecru Cream
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1499
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹2999
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('9', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('9', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('9', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('9', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Duende Axolotl Thermal - Ecru Cream', '1499', 'M', 'aurx-duende-axolotl-thermal-ecru-cream', '9')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="group glossy-card shiny-sheen rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl">
+            
+            <!-- Image Area with Dual Angle Hover -->
+            <div class="relative aspect-[3/4] bg-black overflow-hidden cursor-pointer" onclick="openProductModal('8')">
+                
+                <img 
+                    src="static/uploads/aurx_acid_cross_black.jpg" 
+                    alt="AURX Acid Cross Heavy Thermal - Pitch Black" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                >
+                
+
+                <!-- Out of Stock Overlay -->
+                
+
+                <!-- Subtle Badge (If explicitly set) -->
+                
+                <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 pointer-events-none">
+                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 shiny-badge text-white text-[7px] sm:text-[9px] font-mono font-bold uppercase tracking-wider rounded">
+                        BESTSELLER
+                    </span>
+                </div>
+                
+
+                <!-- Quick View Eye Button -->
+                <button 
+                    type="button" 
+                    onclick="event.stopPropagation(); openProductModal('8')"
+                    class="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-[9px] sm:text-xs backdrop-blur opacity-0 group-hover:opacity-100 transition duration-200"
+                    title="Quick Look"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-3.5 flex-grow flex flex-col justify-between">
+                <div>
+                    <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">
+                        Hoodies &amp; Sweatshirts
+                    </span>
+                    <h3 class="font-heading font-bold text-white text-xs sm:text-base line-clamp-1 hover:text-neutral-300 transition cursor-pointer" onclick="openProductModal('8')">
+                        AURX Acid Cross Heavy Thermal - Pitch Black
+                    </h3>
+                </div>
+
+                <!-- Pricing & Interactive Size Selection -->
+                <div class="space-y-1.5 sm:space-y-2">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-heading font-black text-white text-sm sm:text-lg">
+                            ₹1599
+                        </span>
+                        
+                        <span class="text-[10px] sm:text-xs text-neutral-500 line-through">
+                            ₹3199
+                        </span>
+                        
+                    </div>
+
+                    <!-- Size Selection Buttons -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('8', 'M', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-white text-black border-white"
+                        >
+                            M
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('8', 'L', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            L
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('8', 'XL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XL
+                        </button>
+                        
+                        <button 
+                            type="button" 
+                            onclick="selectCardSize('8', 'XXL', this)"
+                            class="card-size-btn text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border font-mono font-medium transition cursor-pointer bg-black text-neutral-300 border-white/[0.08] hover:border-neutral-500"
+                        >
+                            XXL
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- 1-Click WhatsApp Order Button (Clean Luxury Styling) -->
+                <div class="pt-1 sm:pt-1.5">
+                    
+                    <button 
+                        type="button" 
+                        onclick="quickOrderWhatsApp('AURX Acid Cross Heavy Thermal - Pitch Black', '1599', 'M', 'aurx-acid-cross-heavy-thermal-pitch-black', '8')"
+                        class="w-full py-2.5 sm:py-3 px-3 rounded-xl shiny-btn text-black font-heading font-black text-[10px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs sm:text-sm text-emerald-600"></i>
+                        <span>Order on WhatsApp</span>
+                    </button>
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+    </div>
+    
+
+</section>
+
+<!-- Quick View Slide-in Modal -->
+<div id="quickModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div class="bg-[#141419] border border-white/[0.08] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]">
+        
+        <button 
+            type="button" 
+            onclick="closeProductModal()"
+            class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/80 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center text-xs transition cursor-pointer"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="w-full md:w-1/2 bg-black flex flex-col justify-center relative aspect-square md:aspect-auto">
+            <img id="modalMainImg" src="" alt="" class="w-full h-full object-cover max-h-[360px] md:max-h-full">
+            <div id="modalThumbnails" class="flex gap-2 p-3 bg-black/70 overflow-x-auto absolute bottom-0 inset-x-0"></div>
+        </div>
+
+        <div class="w-full md:w-1/2 p-6 flex flex-col justify-between overflow-y-auto space-y-4">
+            <div class="space-y-4">
+                <div>
+                    <span id="modalCategory" class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 font-bold block mb-1"></span>
+                    <h2 id="modalTitle" class="font-heading font-black text-xl text-white uppercase tracking-tight"></h2>
+                </div>
+
+                <div class="flex items-baseline gap-3">
+                    <span id="modalPrice" class="font-heading font-black text-2xl text-white"></span>
+                    <span id="modalOriginalPrice" class="text-xs text-neutral-500 line-through"></span>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-neutral-400 font-bold mb-2">
+                        Select Size: <span id="selectedSizeLabel" class="text-white font-bold"></span>
+                    </label>
+                    <div id="modalSizeButtons" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="space-y-2 text-xs text-neutral-400 border-t border-white/[0.08] pt-3">
+                    <p id="modalDescription" class="leading-relaxed"></p>
+                    <div id="modalFabricContainer" class="bg-black p-3 rounded-xl border border-white/[0.08] text-[11px] font-mono">
+                        <strong class="text-white block mb-0.5">Details:</strong>
+                        <span id="modalFabric"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button 
+                    id="modalWhatsAppBtn" 
+                    type="button" 
+                    class="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-neutral-200 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
+                >
+                    <i class="fa-brands fa-whatsapp text-sm text-emerald-600"></i>
+                    <span>Order on WhatsApp</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    window.PRODUCTS_DATA = [{"badge": "SIGNATURE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Heather grey thermal knit sweatshirt featuring neon lime distressed Maltese cross artwork and sleeve calligraphic detailing. Boxy oversized streetwear cut.", "discount_pct": 50, "fabric_details": "400 GSM Melange Thermal Cotton, Raw Edge Detailing, Reinforced Seams", "id": 14, "image_list": ["static/uploads/aurx_acid_cross_grey.jpg"], "images": "[\"static/uploads/aurx_acid_cross_grey.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_grey.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-heather-grey", "title": "AURX Acid Cross Heavy Thermal - Heather Grey"}, {"badge": "EXCLUSIVE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Washed charcoal thermal sweatshirt featuring lavender purple skull biting tactical combat dagger, \u0027Warstudios Worldwide\u0027 banner, and gothic sleeve crossbones.", "discount_pct": 50, "fabric_details": "400 GSM Ultra-Heavy Vintage Washed Waffle Cotton, Soft Brushed Feel, Raw Edge Bottom Hem", "id": 13, "image_list": ["static/uploads/aurx_warstudios_skull_charcoal.jpg"], "images": "[\"static/uploads/aurx_warstudios_skull_charcoal.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_warstudios_skull_charcoal.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-warstudios-dagger-skull-thermal-charcoal", "title": "AURX Warstudios Dagger Skull Thermal - Charcoal"}, {"badge": "MOTORSPORT", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Clean optic white thermal racing sweatshirt with multi-color Misery Club racing team graphics, checkered speed flags, number 1 emblem, and racing typography.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Thermal Weave, Multi-Color Plastisol Print, Reinforced Drop Shoulder Fit", "id": 12, "image_list": ["static/uploads/aurx_misery_racing_white.jpg"], "images": "[\"static/uploads/aurx_misery_racing_white.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_misery_racing_white.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-misery-club-racing-thermal-optic-white", "title": "AURX Misery Club Racing Thermal - Optic White"}, {"badge": "LIMITED DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Statement crimson red thermal long-sleeve sweatshirt with vintage woodcut Praying Hands, crucifix rosary, and gothic scripture lettering on sleeves.", "discount_pct": 50, "fabric_details": "380 GSM Heavy Combed Cotton Waffle Knit, Deep Crimson Reactive Dye, Double Ribbed Cuffs", "id": 11, "image_list": ["static/uploads/aurx_praying_hands_red.jpg"], "images": "[\"static/uploads/aurx_praying_hands_red.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_praying_hands_red.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-praying-hands-rosary-thermal-crimson-red", "title": "AURX Praying Hands Rosary Thermal - Crimson Red"}, {"badge": "NEW DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Burgundy maroon thermal knit sweatshirt with cyan blue gothic cross and script scripture chest print, highlighted with angel number \u0027777\u0027 sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Premium Thermal Waffle Weave, Cyan High-Density Silkscreen, Anti-Shrink Wash", "id": 10, "image_list": ["static/uploads/aurx_gothic_cross_maroon.jpg"], "images": "[\"static/uploads/aurx_gothic_cross_maroon.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_gothic_cross_maroon.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-gothic-cross-777-thermal-deep-maroon", "title": "AURX Gothic Cross 777 Thermal - Deep Maroon"}, {"badge": "TRENDING", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Off-white / cream heavyweight thermal waffle sweatshirt with dual circular dragon axolotl screenprint in crimson red and black, framed by barbed flame sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Waffle Knit, 100% Combed Cotton, Ribbed Mock Collar, Reactive Pigment Dyed", "id": 9, "image_list": ["static/uploads/aurx_duende_dragon_cream.jpg"], "images": "[\"static/uploads/aurx_duende_dragon_cream.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_duende_dragon_cream.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-duende-axolotl-thermal-ecru-cream", "title": "AURX Duende Axolotl Thermal - Ecru Cream"}, {"badge": "BESTSELLER", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Pitch black heavyweight waffle thermal sweatshirt featuring iconic distressed acid-lime Maltese cross front graphic and gothic sleeve calligraphy. Engineered with tailored drop-shoulder cut.", "discount_pct": 50, "fabric_details": "400 GSM Heavyweight Waffle Cotton, Vintage Acid Wash Finish, Pre-Shrunk, Double-Needle Stitched Hem", "id": 8, "image_list": ["static/uploads/aurx_acid_cross_black.jpg"], "images": "[\"static/uploads/aurx_acid_cross_black.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_black.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-pitch-black", "title": "AURX Acid Cross Heavy Thermal - Pitch Black"}];
+    window.STORE_SETTINGS = {"admin_password": "pbkdf2:sha256:200000$62580e0744f81f2103bfc8f2c2baeef8$36d0aadc0c6c0a340bc926c83253552773da09ca1cb72f88a5948cb4cccc70af", "announcement_text": "", "banner_subtitle": "Premium Oversized Fits, Heavyweight Fabrics \u0026 Signature Graphics.", "currency_symbol": "\u20b9", "email": "Dheerajgurjar7788@gmail.com", "id": 1, "instagram_url": "https://instagram.com", "store_name": "AURX WEAR", "tagline": "Heavyweight Streetwear \u0026 Luxury Essentials", "whatsapp_number": "917851891611"};
+
+    // Smooth scroll to shop section when category filter or search query is present
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('category') || params.has('q')) {
+            const shopSection = document.getElementById('shop');
+            if (shopSection) {
+                setTimeout(() => {
+                    shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+    });
+</script>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="scroll-mt-14 bg-black border-t border-aurx-border mt-6 sm:mt-14 pt-8 sm:pt-14 pb-4 sm:pb-6">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-10 pb-6 sm:pb-10 border-b border-aurx-border">
+                
+                <div class="md:col-span-2 space-y-3 sm:space-y-4">
+                    <img src="static/images/navbar_logo_hd.png" alt="AURX WEAR" class="h-8 sm:h-10 w-auto object-contain">
+                    <p class="text-neutral-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                        Heavyweight Streetwear &amp; Luxury Essentials. Built for the bold, the confident and the ones who never settle.
+                    </p>
+                    <div class="flex items-center gap-3 pt-1">
+                        <a href="https://api.whatsapp.com/send?phone=917851891611" onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-aurx-card border border-aurx-border flex items-center justify-center text-neutral-400 hover:text-white hover:border-white transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </a>
+                        <a href="mailto:Dheerajgurjar7788@gmail.com" class="w-9 h-9 rounded-full bg-aurx-card border border-aurx-border flex items-center justify-center text-neutral-400 hover:text-white hover:border-white transition">
+                            <i class="fa-regular fa-envelope text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links & Direct Contact (Side-by-Side on Mobile, 2 Columns on Desktop) -->
+                <div class="md:col-span-2 grid grid-cols-2 gap-4 sm:gap-10">
+                    <div>
+                        <h4 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2.5 sm:mb-4">Quick Links</h4>
+                        <ul class="space-y-2 sm:space-y-2.5 text-xs text-neutral-400">
+                            <li><a href="#shop" class="hover:text-white transition">Shop All</a></li>
+                            <li><a href="#categories" class="hover:text-white transition">Collections</a></li>
+                            <li><a href="/about" class="hover:text-white transition">About Us</a></li>
+                            <li><a href="#contact" onclick="const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } else { window.location.href = '/#contact'; return false; }" class="hover:text-white transition">Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2.5 sm:mb-4">Direct Contact</h4>
+                        <p class="text-[11px] sm:text-xs text-neutral-400 mb-1.5 sm:mb-3">For orders & inquiries:</p>
+                        <div class="space-y-2 sm:space-y-2.5 text-xs">
+                            <a href="tel:+917851891611" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-white transition font-mono truncate">
+                                <i class="fa-solid fa-phone text-blue-400 w-3.5 sm:w-4 shrink-0"></i>
+                                <span class="truncate hidden sm:inline">+91 7851891611</span>
+                                <span class="truncate sm:hidden">Direct Call</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=917851891611&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry." onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-emerald-400 transition font-mono truncate">
+                                <i class="fa-brands fa-whatsapp text-emerald-400 w-3.5 sm:w-4 text-sm shrink-0"></i>
+                                <span class="truncate hidden sm:inline">WhatsApp: 7851891611</span>
+                                <span class="truncate sm:hidden">Chat on WhatsApp</span>
+                            </a>
+                            <a href="mailto:Dheerajgurjar7788@gmail.com" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-white transition font-mono truncate">
+                                <i class="fa-solid fa-envelope text-red-400 w-3.5 sm:w-4 shrink-0"></i>
+                                <span class="truncate">Dheerajgurjar7788@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-3.5 sm:pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-neutral-500 gap-1.5 sm:gap-4">
+                <p>&copy; AURX.WEAR. All rights reserved.</p>
+                <p>Wear More. Stand Out.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Luxury Contact Modal (Phone Call, WhatsApp Chat, Gmail) -->
+    <div id="contactModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300 opacity-0">
+        <!-- Backdrop click-to-close -->
+        <div class="fixed inset-0 cursor-pointer" onclick="closeContactModal()"></div>
+
+        <div class="contact-box relative bg-[#111117] border border-white/15 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(255,255,255,0.05)] z-10 transform scale-95 transition-all duration-300 space-y-6">
+            
+            <!-- Close Button -->
+            <button 
+                type="button" 
+                onclick="closeContactModal()"
+                class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-white text-neutral-400 hover:text-black border border-white/10 flex items-center justify-center text-sm transition cursor-pointer"
+                aria-label="Close"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Header -->
+            <div>
+                <div class="text-[11px] font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1.5">
+                    AURX WEAR // DIRECT CONCIERGE
+                </div>
+                <h3 class="font-heading font-black text-2xl text-white uppercase tracking-tight">
+                    GET IN TOUCH
+                </h3>
+                <p class="text-xs text-neutral-400 mt-1">
+                    Direct channel for orders, bespoke sizing, and brand inquiries:
+                </p>
+            </div>
+
+            <!-- 3 Contact Channels -->
+            <div class="space-y-3">
+                
+                <!-- 1. Direct Phone Call -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-blue-500/40 rounded-2xl p-4 transition group flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 text-base group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-blue-400 block font-semibold">Phone Call (Voice)</span>
+                            <span class="font-heading font-bold text-white text-sm sm:text-base tracking-wide block">+91 7851891611</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button 
+                            type="button"
+                            onclick="copyToClipboard('+917851891611', this)"
+                            class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+                            title="Copy Phone Number"
+                        >
+                            <i class="fa-regular fa-copy text-xs"></i>
+                            <span class="text-[11px]">Copy</span>
+                        </button>
+                        <a 
+                            href="tel:+917851891611"
+                            class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-bold uppercase tracking-wider transition shadow-md flex items-center gap-1.5"
+                        >
+                            <i class="fa-solid fa-phone text-[10px]"></i>
+                            <span>Call</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 2. WhatsApp Chat -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-emerald-500/40 rounded-2xl p-4 transition group flex items-center justify-between gap-3 shadow-lg">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-lg group-hover:scale-105 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Instant WhatsApp Chat</span>
+                            <span class="font-heading font-bold text-white text-sm sm:text-base tracking-wide block">+91 7851891611</span>
+                        </div>
+                    </div>
+                    <a 
+                        href="https://api.whatsapp.com/send?phone=917851891611&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry%20regarding%20products."
+                        onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="px-4 py-2 rounded-xl bg-aurx-whatsapp hover:bg-emerald-600 text-white text-xs font-heading font-bold uppercase tracking-wider transition shadow-md shadow-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                        <span>Chat</span>
+                    </a>
+                </div>
+
+                <!-- 3. Gmail / Email -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-red-500/40 rounded-2xl p-4 transition group flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center shrink-0 text-base group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="min-w-0 pr-2">
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-red-400 block font-semibold">Official Gmail / Email</span>
+                            <span class="font-sans font-medium text-xs sm:text-sm text-white block select-all">Dheerajgurjar7788@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <button 
+                            type="button"
+                            onclick="copyToClipboard('Dheerajgurjar7788@gmail.com', this)"
+                            class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+                            title="Copy Email"
+                        >
+                            <i class="fa-regular fa-copy text-xs"></i>
+                            <span class="text-[11px]">Copy</span>
+                        </button>
+                        <a 
+                            href="mailto:Dheerajgurjar7788@gmail.com?subject=Inquiry%20-%20AURX%20WEAR"
+                            class="px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-heading font-bold uppercase tracking-wider transition shadow-md flex items-center gap-1.5"
+                        >
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Details -->
+            <div class="pt-2 border-t border-white/[0.08] flex items-center justify-between text-[11px] text-neutral-400 font-mono">
+                <span>DIRECT INQUIRIES & ORDERS</span>
+                <span>ACTIVE MON – SUN</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Contact Navigation Script -->
+    <script>
+        function openContactModal() {
+            window.location.href = '/contact';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            if (!modal) return;
+            document.body.style.overflow = '';
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            const box = modal.querySelector('.contact-box');
+            if (box) {
+                box.classList.remove('scale-100');
+                box.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const origHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-[11px] text-emerald-400 font-semibold">Copied!</span>';
+                setTimeout(() => {
+                    btn.innerHTML = origHTML;
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                const origHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-[11px] text-emerald-400 font-semibold">Copied!</span>';
+                setTimeout(() => {
+                    btn.innerHTML = origHTML;
+                }, 2000);
+            });
+        }
+    </script>
+
+    <!-- Global Scripts -->
+    <script src="static/js/main.js"></script>
+    
+</body>
+</html>

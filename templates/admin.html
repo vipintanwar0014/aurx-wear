@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden max-w-[100vw]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Product Management — {{ settings.store_name }} Admin</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#08080A',
+                            dark: '#0E0E13',
+                            card: '#121217',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Syne', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            margin: 0;
+            padding: 0;
+        }
+        @media (max-width: 639px) {
+            .mobile-cards-view { display: block !important; }
+            .desktop-table-view { display: none !important; }
+        }
+        @media (min-width: 640px) {
+            .mobile-cards-view { display: none !important; }
+            .desktop-table-view { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-[#08080A] text-white font-sans antialiased min-h-screen flex flex-col selection:bg-white selection:text-black overflow-x-hidden w-full max-w-[100vw]">
+
+    <!-- Top Admin Header -->
+    <header class="bg-[#111116] border-b border-white/[0.08] sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-black border border-white/10 p-1 flex items-center justify-center shadow-lg shrink-0">
+                    <img src="/static/images/navbar_logo_hd.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <h1 class="font-heading font-black text-xs sm:text-base uppercase tracking-wider">{{ settings.store_name }}</h1>
+                        <span class="px-1.5 sm:px-2 py-0.5 rounded-full bg-white/10 text-[8px] sm:text-[9px] font-mono font-bold text-neutral-300 uppercase tracking-widest border border-white/10 shrink-0">
+                            PRODUCT MANAGER
+                        </span>
+                    </div>
+                    <span class="text-[9px] sm:text-[10px] text-neutral-400 font-mono tracking-wider hidden sm:block">Catalog & Inventory Studio</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <a href="/" target="_blank" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-semibold hover:bg-white/10 hover:border-white/30 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    <span class="hidden sm:inline">View Store</span>
+                </a>
+                <button type="button" onclick="openChangePassModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-neutral-800/80 border border-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold hover:bg-neutral-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-key text-neutral-400 text-[10px]"></i>
+                    <span>Change Password</span>
+                </button>
+                <a href="/admin/logout" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold hover:bg-red-500/20 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-[10px]"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full min-w-0">
+        
+        <!-- Flash Alert Message if any -->
+        {% if msg %}
+        <div class="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-circle-check text-base"></i>
+                <span>{{ msg }}</span>
+            </div>
+            <a href="/admin" class="text-neutral-400 hover:text-white text-lg font-bold px-2">&times;</a>
+        </div>
+        {% endif %}
+
+        <!-- Clean Product Summary & Add Action Bar (Fully Responsive on iPhone 15) -->
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 mb-6 sm:mb-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="font-heading font-black text-lg sm:text-2xl uppercase tracking-wider text-white">Clothes & Inventory</h2>
+                
+                <div class="flex items-center gap-3 sm:gap-4 mt-2 text-xs font-mono">
+                    <span class="text-neutral-300">Total: <strong class="text-white">{{ products|length }} Items</strong></span>
+                    <span class="text-emerald-400">● In Stock: <strong>{{ products|selectattr('in_stock', 'equalto', 1)|list|length }}</strong></span>
+                    <span class="text-neutral-400">○ Out: <strong>{{ products|selectattr('in_stock', 'equalto', 0)|list|length }}</strong></span>
+                </div>
+            </div>
+
+            <div class="flex items-center w-full sm:w-auto">
+                <button 
+                    onclick="openAddModal()" 
+                    class="w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition flex items-center justify-center gap-2 shadow-2xl active:scale-95"
+                >
+                    <i class="fa-solid fa-plus text-sm"></i>
+                    <span>Add New Clothes</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- MOBILE PRODUCT CARDS VIEW (Visible only on iPhone / Mobile < 640px) -->
+        <!-- =================================================================== -->
+        <div class="mobile-cards-view block sm:hidden space-y-3.5 mb-8">
+            {% for p in products %}
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="{{ p.primary_image }}" alt="{{ p.title }}" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">{{ p.category }}</span>
+                            {% if p.badge %}
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">{{ p.badge }}</span>
+                            {% endif %}
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">{{ p.title }}</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">{{ settings.currency_symbol }}{{ p.price }}</span>
+                            {% if p.original_price and p.original_price > p.price %}
+                            <span class="line-through text-neutral-500 text-xs">{{ settings.currency_symbol }}{{ p.original_price }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: {{ p.sizes }}</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/{{ p.id }}" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 {% if p.in_stock %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30{% else %}bg-red-500/10 text-red-400 border border-red-500/20 active:bg-red-500/30{% endif %}">
+                            {% if p.in_stock %}
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            {% else %}
+                            <i class="fa-solid fa-circle-xmark text-[10px]"></i>
+                            <span>Out of Stock</span>
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({{ p|tojson|safe }})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/{{ p.slug }}" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/{{ p.id }}" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete {{ p.title }}?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-8 text-center text-neutral-500 bg-[#111116] rounded-2xl border border-white/[0.08]">
+                No clothes in catalog yet.
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- DESKTOP PRODUCTS TABLE (Visible on Screens >= 640px)                -->
+        <!-- =================================================================== -->
+        <div class="desktop-table-view hidden sm:block bg-[#111116] border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-black/50 border-b border-white/[0.08] text-neutral-400 uppercase font-mono text-[10px] tracking-wider">
+                        <tr>
+                            <th class="p-4">Photo & Clothes Name</th>
+                            <th class="p-4">Category</th>
+                            <th class="p-4">Price</th>
+                            <th class="p-4">Sizes</th>
+                            <th class="p-4">Stock Status</th>
+                            <th class="p-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/[0.04]">
+                        {% for p in products %}
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="{{ p.primary_image }}" alt="{{ p.title }}" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">{{ p.title }}</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/{{ p.slug }}</div>
+                                    {% if p.badge %}
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        {{ p.badge }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                {{ p.category }}
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">{{ settings.currency_symbol }}{{ p.price }}</span>
+                                {% if p.original_price and p.original_price > p.price %}
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">{{ settings.currency_symbol }}{{ p.original_price }}</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                {{ p.sizes }}
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/{{ p.id }}" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 {% if p.in_stock %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20{% else %}bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20{% endif %}"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        {% if p.in_stock %}
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        {% else %}
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        <span>Out of Stock</span>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({{ p|tojson|safe }})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/{{ p.slug }}" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/{{ p.id }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete {{ p.title }}?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-neutral-500">No clothes in catalog yet. Click "+ Add New Clothes" above.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 1: ADD NEW CLOTHES (Optimized for iPhone 15 Touch & Viewport) -->
+    <!-- =================================================================== -->
+    <div id="addProductModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-[#121217] border border-white/[0.1] rounded-3xl max-w-lg w-full p-5 sm:p-8 max-h-[88vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
+                <h3 class="font-heading font-black text-base uppercase tracking-wider text-white">Add New Clothes</h3>
+                <button onclick="closeModal('addProductModal')" class="text-neutral-400 hover:text-white text-2xl leading-none p-1">&times;</button>
+            </div>
+
+            <form action="/admin/product/add" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Title</label>
+                    <input type="text" name="title" required placeholder="e.g. Cyber Chrome Heavyweight Tee" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Category</label>
+                        <input type="text" name="category" required placeholder="Oversized T-Shirts" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Selling Price (₹)</label>
+                        <input type="number" name="price" required placeholder="999" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Original Price (₹) <span class="text-neutral-500 font-normal">Optional</span></label>
+                        <input type="number" name="original_price" placeholder="1999" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Badge <span class="text-neutral-500 font-normal">Optional</span></label>
+                        <input type="text" name="badge" placeholder="BESTSELLER / NEW" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Available Sizes (Comma separated)</label>
+                    <input type="text" name="sizes" value="S,M,L,XL,XXL" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Description</label>
+                    <textarea name="description" rows="2" placeholder="Streetwear product description..." class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Fabric Specifications</label>
+                    <input type="text" name="fabric_details" placeholder="240 GSM 100% Combed Cotton, Pre-shrunk" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Upload Product Photos</label>
+                    <input type="file" name="images" multiple accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20">
+                </div>
+
+                <div class="flex items-center gap-6 pt-1">
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="in_stock" value="1" checked class="rounded bg-black border-white/20 text-white">
+                        <span>In Stock</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="is_featured" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>Feature on Homepage</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl mt-3 active:scale-95">
+                    Save New Clothes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 2: EDIT EXISTING CLOTHES (Optimized for iPhone 15 Touch)      -->
+    <!-- =================================================================== -->
+    <div id="editProductModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-[#121217] border border-white/[0.1] rounded-3xl max-w-lg w-full p-5 sm:p-8 max-h-[88vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
+                <h3 class="font-heading font-black text-base uppercase tracking-wider text-white">Edit Clothes Details</h3>
+                <button onclick="closeModal('editProductModal')" class="text-neutral-400 hover:text-white text-2xl leading-none p-1">&times;</button>
+            </div>
+
+            <form id="editProductForm" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <input type="hidden" name="existing_images" id="editExistingImages">
+
+                <!-- Current Photo Preview -->
+                <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-black/40 border border-white/[0.06]">
+                    <img id="editImagePreview" src="" alt="Preview" class="w-14 h-18 sm:w-16 sm:h-20 rounded-xl object-cover bg-black border border-white/10 shadow-md shrink-0">
+                    <div>
+                        <span class="text-xs text-white font-bold block mb-0.5">Current Image</span>
+                        <span class="text-[10px] text-neutral-400 block">Nayi photo upload karne par ye replace ho jayegi.</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Title</label>
+                    <input type="text" name="title" id="editTitle" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Category</label>
+                        <input type="text" name="category" id="editCategory" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Selling Price (₹)</label>
+                        <input type="number" name="price" id="editPrice" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Original Price (₹)</label>
+                        <input type="number" name="original_price" id="editOriginalPrice" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Badge</label>
+                        <input type="text" name="badge" id="editBadge" placeholder="BESTSELLER" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Available Sizes (Comma separated)</label>
+                    <input type="text" name="sizes" id="editSizes" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Description</label>
+                    <textarea name="description" id="editDescription" rows="2" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Fabric Specifications</label>
+                    <input type="text" name="fabric_details" id="editFabricDetails" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Upload New Photo (Optional)</label>
+                    <input type="file" name="new_images" multiple accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20">
+                </div>
+
+                <div class="flex items-center gap-6 pt-1">
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="in_stock" id="editInStock" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>In Stock</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="is_featured" id="editIsFeatured" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>Feature on Homepage</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl mt-3 active:scale-95">
+                    Update Clothes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript for Modals -->
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function openAddModal() {
+            openModal('addProductModal');
+        }
+
+        function openEditModal(product) {
+            const form = document.getElementById('editProductForm');
+            form.action = '/admin/product/edit/' + product.id;
+            
+            document.getElementById('editTitle').value = product.title || '';
+            document.getElementById('editCategory').value = product.category || '';
+            document.getElementById('editPrice').value = product.price || '';
+            document.getElementById('editOriginalPrice').value = product.original_price || '';
+            document.getElementById('editBadge').value = product.badge || '';
+            document.getElementById('editSizes').value = product.sizes || 'S,M,L,XL';
+            document.getElementById('editDescription').value = product.description || '';
+            document.getElementById('editFabricDetails').value = product.fabric_details || '';
+            document.getElementById('editExistingImages').value = JSON.stringify(product.image_list || []);
+            document.getElementById('editImagePreview').src = product.primary_image || '/static/images/logo.jpg';
+            document.getElementById('editInStock').checked = product.in_stock === 1;
+            document.getElementById('editIsFeatured').checked = product.is_featured === 1;
+
+            openModal('editProductModal');
+        }
+    </script>
+</body>
+</html>

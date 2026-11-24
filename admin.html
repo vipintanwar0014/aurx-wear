@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden max-w-[100vw]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Product Management — AURX WEAR Admin</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#08080A',
+                            dark: '#0E0E13',
+                            card: '#121217',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Syne', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            margin: 0;
+            padding: 0;
+        }
+        @media (max-width: 639px) {
+            .mobile-cards-view { display: block !important; }
+            .desktop-table-view { display: none !important; }
+        }
+        @media (min-width: 640px) {
+            .mobile-cards-view { display: none !important; }
+            .desktop-table-view { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-[#08080A] text-white font-sans antialiased min-h-screen flex flex-col selection:bg-white selection:text-black overflow-x-hidden w-full max-w-[100vw]">
+<!-- ======================================================================= -->
+<!-- FLOATING OTP NOTIFICATION TOAST -->
+<!-- ======================================================================= -->
+<div id="otpToast" class="fixed top-6 right-6 z-[100005] hidden bg-neutral-900 border border-green-500/60 rounded-2xl p-5 shadow-2xl backdrop-blur-xl max-w-sm transition-all duration-300">
+    <div class="flex items-start gap-3.5">
+        <div class="w-10 h-10 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 border border-green-500/30">
+            <i class="fa-solid fa-shield-halved text-base"></i>
+        </div>
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider">AURX SECURITY OTP</h4>
+                <button type="button" onclick="document.getElementById('otpToast').classList.add('hidden')" class="text-neutral-400 hover:text-white text-sm">&times;</button>
+            </div>
+            <p class="text-xs text-neutral-300 mt-1">Verification code for registered number <strong class="text-white font-mono">+91 7851891611</strong>:</p>
+            <div class="mt-2.5 flex items-center gap-2">
+                <span id="otpDisplayCode" class="text-2xl font-mono font-black text-green-400 tracking-widest bg-black/80 px-3.5 py-1 rounded-xl border border-neutral-700 select-all">------</span>
+                <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('otpDisplayCode').innerText); alert('OTP copied!')" class="text-xs text-neutral-300 hover:text-white bg-neutral-800 hover:bg-neutral-700 px-2.5 py-1.5 rounded-lg border border-neutral-700 font-medium transition">Copy</button>
+            </div>
+            <p class="text-[10px] text-neutral-500 mt-2">Valid for 10 minutes &bull; Do not share with anyone</p>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- CHANGE PASSWORD MODAL (2 OPTIONS: OLD PASSWORD OR MOBILE OTP) -->
+<!-- ======================================================================= -->
+<div id="changePassModal" class="fixed inset-0 z-[100002] hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-neutral-900 border border-neutral-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="flex items-center justify-between pb-4 border-b border-neutral-800">
+            <div>
+                <h3 class="font-heading font-black text-base sm:text-lg text-white uppercase tracking-wide">CHANGE ADMIN PASSWORD</h3>
+                <p class="text-xs text-neutral-400 mt-0.5">Select verification method to set new key</p>
+            </div>
+            <button type="button" onclick="closeChangePassModal()" class="w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center text-sm transition">&times;</button>
+        </div>
+
+        <!-- 2 Selection Tabs -->
+        <div class="grid grid-cols-2 gap-2 mt-5 p-1 bg-black/60 border border-neutral-800 rounded-xl">
+            <button type="button" id="tabBtnOldPass" onclick="switchChangePassTab('old')" class="py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider bg-white text-black shadow">
+                1. Old Password
+            </button>
+            <button type="button" id="tabBtnOtp" onclick="switchChangePassTab('otp')" class="py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider text-neutral-400 hover:text-white">
+                2. Mobile OTP
+            </button>
+        </div>
+
+        <!-- OPTION 1: CHANGE USING OLD PASSWORD -->
+        <form id="formOldPass" onsubmit="handleChangePassOld(event)" class="space-y-4 mt-6">
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">Current Password</label>
+                <input type="password" id="inputCurrentPass" placeholder="Enter current password" required
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">New Password (Min 6 chars)</label>
+                <input type="password" id="inputNewPass1" placeholder="Enter new strong password" required minlength="6"
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+                <input type="password" id="inputConfirmPass1" placeholder="Confirm new password" required minlength="6"
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition">
+            </div>
+            <p id="errorOldPass" class="hidden text-xs text-red-400 font-medium"></p>
+            <p id="successOldPass" class="hidden text-xs text-green-400 font-medium"></p>
+            <div class="pt-2 flex gap-3">
+                <button type="button" onclick="closeChangePassModal()" class="flex-1 py-2.5 border border-neutral-700 text-neutral-300 hover:text-white rounded-xl text-xs font-bold transition uppercase">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold transition uppercase shadow-lg">Save Password</button>
+            </div>
+        </form>
+
+        <!-- OPTION 2: CHANGE USING MOBILE OTP -->
+        <form id="formOtpPass" onsubmit="handleChangePassOtp(event)" class="space-y-4 mt-6 hidden">
+            <div class="p-3.5 bg-neutral-800/60 border border-neutral-700 rounded-xl flex items-center justify-between">
+                <div>
+                    <span class="block text-[10px] uppercase tracking-wider text-neutral-400">Registered Phone</span>
+                    <strong class="text-xs font-mono text-white tracking-wider">+91 78518 91611</strong>
+                </div>
+                <button type="button" id="btnSendOtpModal" onclick="triggerSendOTP('btnSendOtpModal')" class="bg-neutral-700 hover:bg-neutral-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition border border-neutral-600">
+                    Send OTP &rarr;
+                </button>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">Enter 6-Digit OTP</label>
+                <input type="text" id="inputOtpCode" placeholder="6-digit code" maxlength="6" required pattern="[0-9]{6}"
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white font-mono text-base tracking-widest text-center focus:outline-none focus:border-white transition">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">New Password (Min 6 chars)</label>
+                <input type="password" id="inputNewPass2" placeholder="Enter new password" required minlength="6"
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+                <input type="password" id="inputConfirmPass2" placeholder="Confirm new password" required minlength="6"
+                       class="w-full bg-black/70 border border-neutral-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition">
+            </div>
+            <p id="errorOtpPass" class="hidden text-xs text-red-400 font-medium"></p>
+            <p id="successOtpPass" class="hidden text-xs text-green-400 font-medium"></p>
+            <div class="pt-2 flex gap-3">
+                <button type="button" onclick="closeChangePassModal()" class="flex-1 py-2.5 border border-neutral-700 text-neutral-300 hover:text-white rounded-xl text-xs font-bold transition uppercase">Cancel</button>
+                <button type="submit" class="flex-1 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold transition uppercase shadow-lg">Verify & Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- CLIENT-SIDE AUTH GATE FOR LOGIN SCREEN WITH FORGOT/RESET OTP -->
+<!-- ======================================================================= -->
+<div id="authGate" class="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-neutral-900/90 border border-neutral-700/60 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <div class="text-center mb-8">
+            <img src="static/images/navbar_logo_hd.png" alt="AURX WEAR" class="h-14 mx-auto mb-4 object-contain filter drop-shadow">
+            <h2 class="font-heading font-black text-xl text-white tracking-wider uppercase">COMMAND CENTER</h2>
+            <p class="text-xs text-neutral-400 mt-1">Enter admin password to manage store</p>
+        </div>
+        
+        <!-- Standard Login View -->
+        <div id="loginView">
+            <form onsubmit="loginAdmin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-2">Admin Password</label>
+                    <input type="password" id="adminPassInput" placeholder="Enter password (e.g. dheeraj@123)" required
+                           class="w-full bg-black/60 border border-neutral-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white transition">
+                    <p id="loginError" class="hidden text-xs text-red-400 mt-1.5 font-medium">Incorrect password. Please try again.</p>
+                </div>
+                
+                <button type="submit" class="w-full bg-white hover:bg-neutral-200 text-black font-bold py-3 px-4 rounded-xl text-sm transition shadow-lg tracking-wide uppercase">
+                    Unlock Command Center &rarr;
+                </button>
+            </form>
+
+            <div class="mt-5 pt-4 border-t border-neutral-800 text-center">
+                <button type="button" onclick="showForgotOtpView()" class="text-xs text-neutral-400 hover:text-white transition underline">
+                    Forgot Password? Reset via Mobile OTP &rarr;
+                </button>
+            </div>
+        </div>
+
+        <!-- Forgot / Reset via OTP View -->
+        <div id="forgotOtpView" class="hidden space-y-4">
+            <div class="p-3.5 bg-neutral-800/60 border border-neutral-700 rounded-xl flex items-center justify-between">
+                <div>
+                    <span class="block text-[10px] uppercase tracking-wider text-neutral-400">Registered Number</span>
+                    <strong class="text-xs font-mono text-white">+91 78518 91611</strong>
+                </div>
+                <button type="button" id="btnSendOtpLogin" onclick="triggerSendOTP('btnSendOtpLogin')" class="bg-neutral-700 hover:bg-neutral-600 text-white text-xs px-2.5 py-1 rounded-lg border border-neutral-600">
+                    Send OTP &rarr;
+                </button>
+            </div>
+
+            <form onsubmit="handleForgotResetOtp(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-semibold text-neutral-300 uppercase tracking-wider mb-1">Enter 6-Digit OTP</label>
+                    <input type="text" id="forgotOtpInput" placeholder="Enter 6-digit OTP" maxlength="6" required pattern="[0-9]{6}"
+                           class="w-full bg-black/60 border border-neutral-700 rounded-xl px-3 py-2 text-white font-mono text-center tracking-widest text-sm focus:outline-none focus:border-white transition">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-neutral-300 uppercase tracking-wider mb-1">New Password (Min 6 chars)</label>
+                    <input type="password" id="forgotNewPass" placeholder="Enter new password" minlength="6" required
+                           class="w-full bg-black/60 border border-neutral-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition">
+                </div>
+                <p id="forgotError" class="hidden text-xs text-red-400 font-medium"></p>
+                <p id="forgotSuccess" class="hidden text-xs text-green-400 font-medium"></p>
+
+                <button type="submit" class="w-full bg-white hover:bg-neutral-200 text-black font-bold py-2.5 px-4 rounded-xl text-xs transition uppercase shadow-lg">
+                    Reset & Unlock Dashboard &rarr;
+                </button>
+            </form>
+
+            <div class="text-center pt-2">
+                <button type="button" onclick="showLoginView()" class="text-xs text-neutral-400 hover:text-white transition underline">
+                    &larr; Back to Login
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-neutral-800 flex items-center justify-between text-xs text-neutral-400">
+            <span>Default: <strong class="text-neutral-300">dheeraj@123</strong></span>
+            <a href="index.html" class="hover:text-white transition underline">&larr; Return to Store</a>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- JAVASCRIPT LOGIC FOR AUTH GATE, MODALS & OTP -->
+<!-- ======================================================================= -->
+<script>
+let activeGeneratedOTP = null;
+
+function getActivePassword() {
+    return localStorage.getItem("aurx_admin_password") || "dheeraj@123";
+}
+
+function setActivePassword(newPass) {
+    localStorage.setItem("aurx_admin_password", newPass);
+    // Post to Python backend if reachable
+    try {
+        const formData = new URLSearchParams();
+        formData.append("new_password", newPass);
+        formData.append("old_password", getActivePassword());
+        fetch("/admin/change-password", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: formData.toString()
+        }).catch(() => {});
+    } catch(e) {}
+}
+
+function checkAdminAuth() {
+    const isAuth = localStorage.getItem("aurx_admin_auth") === "true";
+    const gate = document.getElementById("authGate");
+    const content = document.getElementById("mainAdminContent");
+    if (gate && content) {
+        if (isAuth) {
+            gate.style.display = "none";
+            content.style.display = "block";
+        } else {
+            gate.style.display = "flex";
+            content.style.display = "none";
+        }
+    }
+}
+
+function loginAdmin(e) {
+    if (e) e.preventDefault();
+    const pin = (document.getElementById("adminPassInput").value || "").trim();
+    if (pin === getActivePassword() || pin === "dheeraj@123") {
+        localStorage.setItem("aurx_admin_auth", "true");
+        document.getElementById("loginError").classList.add("hidden");
+        checkAdminAuth();
+    } else {
+        document.getElementById("loginError").classList.remove("hidden");
+    }
+}
+
+function logoutAdmin() {
+    localStorage.removeItem("aurx_admin_auth");
+    checkAdminAuth();
+}
+
+function showForgotOtpView() {
+    document.getElementById("loginView").classList.add("hidden");
+    document.getElementById("forgotOtpView").classList.remove("hidden");
+}
+
+function showLoginView() {
+    document.getElementById("forgotOtpView").classList.add("hidden");
+    document.getElementById("loginView").classList.remove("hidden");
+}
+
+function triggerSendOTP(buttonId) {
+    activeGeneratedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    document.getElementById("otpDisplayCode").innerText = activeGeneratedOTP;
+    const toast = document.getElementById("otpToast");
+    toast.classList.remove("hidden");
+
+    const btn = document.getElementById(buttonId);
+    if (btn) {
+        let sec = 60;
+        btn.disabled = true;
+        btn.classList.add("opacity-50", "cursor-not-allowed");
+        const timer = setInterval(() => {
+            sec--;
+            btn.innerText = `Resend (${sec}s)`;
+            if (sec <= 0) {
+                clearInterval(timer);
+                btn.disabled = false;
+                btn.innerText = "Resend OTP";
+                btn.classList.remove("opacity-50", "cursor-not-allowed");
+            }
+        }, 1000);
+    }
+}
+
+function openChangePassModal() {
+    document.getElementById("changePassModal").classList.remove("hidden");
+}
+function closeChangePassModal() {
+    document.getElementById("changePassModal").classList.add("hidden");
+}
+
+function switchChangePassTab(tab) {
+    const btnOld = document.getElementById("tabBtnOldPass");
+    const btnOtp = document.getElementById("tabBtnOtp");
+    const formOld = document.getElementById("formOldPass");
+    const formOtp = document.getElementById("formOtpPass");
+
+    if (tab === "old") {
+        btnOld.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider bg-white text-black shadow";
+        btnOtp.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider text-neutral-400 hover:text-white";
+        formOld.classList.remove("hidden");
+        formOtp.classList.add("hidden");
+    } else {
+        btnOtp.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider bg-white text-black shadow";
+        btnOld.className = "py-2.5 px-3 rounded-lg text-xs font-bold transition uppercase tracking-wider text-neutral-400 hover:text-white";
+        formOtp.classList.remove("hidden");
+        formOld.classList.add("hidden");
+    }
+}
+
+function handleChangePassOld(e) {
+    e.preventDefault();
+    const curr = document.getElementById("inputCurrentPass").value;
+    const n1 = document.getElementById("inputNewPass1").value;
+    const n2 = document.getElementById("inputConfirmPass1").value;
+    const err = document.getElementById("errorOldPass");
+    const succ = document.getElementById("successOldPass");
+
+    err.classList.add("hidden");
+    succ.classList.add("hidden");
+
+    if (curr !== getActivePassword() && curr !== "dheeraj@123") {
+        err.innerText = "Current password is incorrect!";
+        err.classList.remove("hidden");
+        return;
+    }
+    if (n1 !== n2) {
+        err.innerText = "New passwords do not match!";
+        err.classList.remove("hidden");
+        return;
+    }
+    if (n1.length < 6) {
+        err.innerText = "Password must be at least 6 characters!";
+        err.classList.remove("hidden");
+        return;
+    }
+
+    setActivePassword(n1);
+    succ.innerText = "Password updated successfully!";
+    succ.classList.remove("hidden");
+    setTimeout(() => {
+        closeChangePassModal();
+        alert("Admin password changed successfully to: " + n1);
+    }, 1200);
+}
+
+function handleChangePassOtp(e) {
+    e.preventDefault();
+    const code = document.getElementById("inputOtpCode").value;
+    const n1 = document.getElementById("inputNewPass2").value;
+    const n2 = document.getElementById("inputConfirmPass2").value;
+    const err = document.getElementById("errorOtpPass");
+    const succ = document.getElementById("successOtpPass");
+
+    err.classList.add("hidden");
+    succ.classList.add("hidden");
+
+    if (!activeGeneratedOTP || code !== activeGeneratedOTP) {
+        err.innerText = "Invalid OTP! Please enter the 6-digit code.";
+        err.classList.remove("hidden");
+        return;
+    }
+    if (n1 !== n2) {
+        err.innerText = "New passwords do not match!";
+        err.classList.remove("hidden");
+        return;
+    }
+    if (n1.length < 6) {
+        err.innerText = "Password must be at least 6 characters!";
+        err.classList.remove("hidden");
+        return;
+    }
+
+    setActivePassword(n1);
+    succ.innerText = "Password reset via OTP successfully!";
+    succ.classList.remove("hidden");
+    setTimeout(() => {
+        closeChangePassModal();
+        alert("Admin password updated via OTP to: " + n1);
+    }, 1200);
+}
+
+function handleForgotResetOtp(e) {
+    e.preventDefault();
+    const code = document.getElementById("forgotOtpInput").value;
+    const n1 = document.getElementById("forgotNewPass").value;
+    const err = document.getElementById("forgotError");
+    const succ = document.getElementById("forgotSuccess");
+
+    err.classList.add("hidden");
+    succ.classList.add("hidden");
+
+    if (!activeGeneratedOTP || code !== activeGeneratedOTP) {
+        err.innerText = "Invalid OTP code!";
+        err.classList.remove("hidden");
+        return;
+    }
+    if (n1.length < 6) {
+        err.innerText = "Password must be at least 6 characters!";
+        err.classList.remove("hidden");
+        return;
+    }
+
+    setActivePassword(n1);
+    localStorage.setItem("aurx_admin_auth", "true");
+    succ.innerText = "Password reset! Unlocking dashboard...";
+    succ.classList.remove("hidden");
+    setTimeout(() => {
+        checkAdminAuth();
+    }, 1000);
+}
+
+window.addEventListener("DOMContentLoaded", checkAdminAuth);
+</script>
+<div id="mainAdminContent" style="display:none;">
+
+    <!-- Top Admin Header -->
+    <header class="bg-[#111116] border-b border-white/[0.08] sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-black border border-white/10 p-1 flex items-center justify-center shadow-lg shrink-0">
+                    <img src="static/images/navbar_logo_hd.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <h1 class="font-heading font-black text-xs sm:text-base uppercase tracking-wider">AURX WEAR</h1>
+                        <span class="px-1.5 sm:px-2 py-0.5 rounded-full bg-white/10 text-[8px] sm:text-[9px] font-mono font-bold text-neutral-300 uppercase tracking-widest border border-white/10 shrink-0">
+                            PRODUCT MANAGER
+                        </span>
+                    </div>
+                    <span class="text-[9px] sm:text-[10px] text-neutral-400 font-mono tracking-wider hidden sm:block">Catalog & Inventory Studio</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <a href="/" target="_blank" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-semibold hover:bg-white/10 hover:border-white/30 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    <span class="hidden sm:inline">View Store</span>
+                </a>
+                <button type="button" onclick="openChangePassModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-neutral-800/80 border border-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold hover:bg-neutral-700 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-key text-neutral-400 text-[10px]"></i>
+                    <span>Change Password</span>
+                </button>
+                <a href="javascript:void(0)" onclick="logoutAdmin()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold hover:bg-red-500/20 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-[10px]"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full min-w-0">
+        
+        <!-- Flash Alert Message if any -->
+        
+
+        <!-- Clean Product Summary & Add Action Bar (Fully Responsive on iPhone 15) -->
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 mb-6 sm:mb-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="font-heading font-black text-lg sm:text-2xl uppercase tracking-wider text-white">Clothes & Inventory</h2>
+                
+                <div class="flex items-center gap-3 sm:gap-4 mt-2 text-xs font-mono">
+                    <span class="text-neutral-300">Total: <strong class="text-white">7 Items</strong></span>
+                    <span class="text-emerald-400">● In Stock: <strong>7</strong></span>
+                    <span class="text-neutral-400">○ Out: <strong>0</strong></span>
+                </div>
+            </div>
+
+            <div class="flex items-center w-full sm:w-auto">
+                <button 
+                    onclick="openAddModal()" 
+                    class="w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition flex items-center justify-center gap-2 shadow-2xl active:scale-95"
+                >
+                    <i class="fa-solid fa-plus text-sm"></i>
+                    <span>Add New Clothes</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- MOBILE PRODUCT CARDS VIEW (Visible only on iPhone / Mobile < 640px) -->
+        <!-- =================================================================== -->
+        <div class="mobile-cards-view block sm:hidden space-y-3.5 mb-8">
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_acid_cross_grey.jpg" alt="AURX Acid Cross Heavy Thermal - Heather Grey" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">SIGNATURE</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Acid Cross Heavy Thermal - Heather Grey</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1599</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹3199</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/14" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "SIGNATURE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Heather grey thermal knit sweatshirt featuring neon lime distressed Maltese cross artwork and sleeve calligraphic detailing. Boxy oversized streetwear cut.", "discount_pct": 50, "fabric_details": "400 GSM Melange Thermal Cotton, Raw Edge Detailing, Reinforced Seams", "id": 14, "image_list": ["static/uploads/aurx_acid_cross_grey.jpg"], "images": "[\"static/uploads/aurx_acid_cross_grey.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_grey.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-heather-grey", "title": "AURX Acid Cross Heavy Thermal - Heather Grey"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-acid-cross-heavy-thermal-heather-grey" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/14" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Acid Cross Heavy Thermal - Heather Grey?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_warstudios_skull_charcoal.jpg" alt="AURX Warstudios Dagger Skull Thermal - Charcoal" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">EXCLUSIVE</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Warstudios Dagger Skull Thermal - Charcoal</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1599</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹3199</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/13" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "EXCLUSIVE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Washed charcoal thermal sweatshirt featuring lavender purple skull biting tactical combat dagger, \u0027Warstudios Worldwide\u0027 banner, and gothic sleeve crossbones.", "discount_pct": 50, "fabric_details": "400 GSM Ultra-Heavy Vintage Washed Waffle Cotton, Soft Brushed Feel, Raw Edge Bottom Hem", "id": 13, "image_list": ["static/uploads/aurx_warstudios_skull_charcoal.jpg"], "images": "[\"static/uploads/aurx_warstudios_skull_charcoal.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_warstudios_skull_charcoal.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-warstudios-dagger-skull-thermal-charcoal", "title": "AURX Warstudios Dagger Skull Thermal - Charcoal"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-warstudios-dagger-skull-thermal-charcoal" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/13" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Warstudios Dagger Skull Thermal - Charcoal?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_misery_racing_white.jpg" alt="AURX Misery Club Racing Thermal - Optic White" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">MOTORSPORT</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Misery Club Racing Thermal - Optic White</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1499</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹2999</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/12" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "MOTORSPORT", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Clean optic white thermal racing sweatshirt with multi-color Misery Club racing team graphics, checkered speed flags, number 1 emblem, and racing typography.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Thermal Weave, Multi-Color Plastisol Print, Reinforced Drop Shoulder Fit", "id": 12, "image_list": ["static/uploads/aurx_misery_racing_white.jpg"], "images": "[\"static/uploads/aurx_misery_racing_white.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_misery_racing_white.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-misery-club-racing-thermal-optic-white", "title": "AURX Misery Club Racing Thermal - Optic White"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-misery-club-racing-thermal-optic-white" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/12" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Misery Club Racing Thermal - Optic White?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_praying_hands_red.jpg" alt="AURX Praying Hands Rosary Thermal - Crimson Red" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">LIMITED DROP</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Praying Hands Rosary Thermal - Crimson Red</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1599</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹3199</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/11" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "LIMITED DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Statement crimson red thermal long-sleeve sweatshirt with vintage woodcut Praying Hands, crucifix rosary, and gothic scripture lettering on sleeves.", "discount_pct": 50, "fabric_details": "380 GSM Heavy Combed Cotton Waffle Knit, Deep Crimson Reactive Dye, Double Ribbed Cuffs", "id": 11, "image_list": ["static/uploads/aurx_praying_hands_red.jpg"], "images": "[\"static/uploads/aurx_praying_hands_red.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_praying_hands_red.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-praying-hands-rosary-thermal-crimson-red", "title": "AURX Praying Hands Rosary Thermal - Crimson Red"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-praying-hands-rosary-thermal-crimson-red" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/11" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Praying Hands Rosary Thermal - Crimson Red?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_gothic_cross_maroon.jpg" alt="AURX Gothic Cross 777 Thermal - Deep Maroon" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">NEW DROP</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Gothic Cross 777 Thermal - Deep Maroon</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1499</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹2999</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/10" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "NEW DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Burgundy maroon thermal knit sweatshirt with cyan blue gothic cross and script scripture chest print, highlighted with angel number \u0027777\u0027 sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Premium Thermal Waffle Weave, Cyan High-Density Silkscreen, Anti-Shrink Wash", "id": 10, "image_list": ["static/uploads/aurx_gothic_cross_maroon.jpg"], "images": "[\"static/uploads/aurx_gothic_cross_maroon.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_gothic_cross_maroon.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-gothic-cross-777-thermal-deep-maroon", "title": "AURX Gothic Cross 777 Thermal - Deep Maroon"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-gothic-cross-777-thermal-deep-maroon" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/10" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Gothic Cross 777 Thermal - Deep Maroon?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_duende_dragon_cream.jpg" alt="AURX Duende Axolotl Thermal - Ecru Cream" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">TRENDING</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Duende Axolotl Thermal - Ecru Cream</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1499</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹2999</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/9" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "TRENDING", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Off-white / cream heavyweight thermal waffle sweatshirt with dual circular dragon axolotl screenprint in crimson red and black, framed by barbed flame sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Waffle Knit, 100% Combed Cotton, Ribbed Mock Collar, Reactive Pigment Dyed", "id": 9, "image_list": ["static/uploads/aurx_duende_dragon_cream.jpg"], "images": "[\"static/uploads/aurx_duende_dragon_cream.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_duende_dragon_cream.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-duende-axolotl-thermal-ecru-cream", "title": "AURX Duende Axolotl Thermal - Ecru Cream"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-duende-axolotl-thermal-ecru-cream" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/9" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Duende Axolotl Thermal - Ecru Cream?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex items-start gap-3">
+                    <img src="static/uploads/aurx_acid_cross_black.jpg" alt="AURX Acid Cross Heavy Thermal - Pitch Black" class="w-16 h-20 rounded-xl object-cover bg-black border border-white/10 shrink-0 shadow-md">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-neutral-400 truncate">Hoodies &amp; Sweatshirts</span>
+                            
+                            <span class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-white/10 text-white border border-white/15 shrink-0">BESTSELLER</span>
+                            
+                        </div>
+                        <h3 class="font-bold text-white text-sm line-clamp-1 mt-0.5">AURX Acid Cross Heavy Thermal - Pitch Black</h3>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="font-mono font-bold text-emerald-400 text-sm">₹1599</span>
+                            
+                            <span class="line-through text-neutral-500 text-xs">₹3199</span>
+                            
+                        </div>
+                        <div class="text-[10px] text-neutral-400 font-mono mt-0.5 truncate">Sizes: M,L,XL,XXL</div>
+                    </div>
+                </div>
+
+                <!-- Mobile Action Row: Big Thumb Touch Targets -->
+                <div class="pt-2.5 border-t border-white/[0.06] flex items-center gap-2">
+                    <!-- Stock toggle button (1-tap) -->
+                    <form action="/admin/product/toggle-stock/8" method="POST" class="flex-1">
+                        <button type="submit" class="w-full py-2 px-2.5 rounded-xl text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 active:bg-emerald-500/30">
+                            
+                            <i class="fa-solid fa-circle-check text-[10px]"></i>
+                            <span>In Stock</span>
+                            
+                        </button>
+                    </form>
+
+                    <!-- Edit button (1-tap opens modal pre-filled) -->
+                    <button 
+                        onclick='openEditModal({"badge": "BESTSELLER", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Pitch black heavyweight waffle thermal sweatshirt featuring iconic distressed acid-lime Maltese cross front graphic and gothic sleeve calligraphy. Engineered with tailored drop-shoulder cut.", "discount_pct": 50, "fabric_details": "400 GSM Heavyweight Waffle Cotton, Vintage Acid Wash Finish, Pre-Shrunk, Double-Needle Stitched Hem", "id": 8, "image_list": ["static/uploads/aurx_acid_cross_black.jpg"], "images": "[\"static/uploads/aurx_acid_cross_black.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_black.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-pitch-black", "title": "AURX Acid Cross Heavy Thermal - Pitch Black"})' 
+                        class="py-2 px-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider transition hover:bg-neutral-200 active:scale-95 flex items-center gap-1"
+                    >
+                        <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                        <span>Edit</span>
+                    </button>
+
+                    <!-- View on store link -->
+                    <a 
+                        href="/product/aurx-acid-cross-heavy-thermal-pitch-black" 
+                        target="_blank" 
+                        class="p-2 w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-neutral-400 hover:text-white flex items-center justify-center text-xs shrink-0"
+                        title="View Live"
+                    >
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                    <!-- Delete button -->
+                    <form action="/admin/product/delete/8" method="POST" class="inline shrink-0" onsubmit="return confirm('Delete AURX Acid Cross Heavy Thermal - Pitch Black?');">
+                        <button type="submit" class="p-2 w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xs" title="Delete">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- DESKTOP PRODUCTS TABLE (Visible on Screens >= 640px)                -->
+        <!-- =================================================================== -->
+        <div class="desktop-table-view hidden sm:block bg-[#111116] border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-black/50 border-b border-white/[0.08] text-neutral-400 uppercase font-mono text-[10px] tracking-wider">
+                        <tr>
+                            <th class="p-4">Photo & Clothes Name</th>
+                            <th class="p-4">Category</th>
+                            <th class="p-4">Price</th>
+                            <th class="p-4">Sizes</th>
+                            <th class="p-4">Stock Status</th>
+                            <th class="p-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/[0.04]">
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_acid_cross_grey.jpg" alt="AURX Acid Cross Heavy Thermal - Heather Grey" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Acid Cross Heavy Thermal - Heather Grey</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-acid-cross-heavy-thermal-heather-grey</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        SIGNATURE
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1599</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹3199</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/14" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "SIGNATURE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Heather grey thermal knit sweatshirt featuring neon lime distressed Maltese cross artwork and sleeve calligraphic detailing. Boxy oversized streetwear cut.", "discount_pct": 50, "fabric_details": "400 GSM Melange Thermal Cotton, Raw Edge Detailing, Reinforced Seams", "id": 14, "image_list": ["static/uploads/aurx_acid_cross_grey.jpg"], "images": "[\"static/uploads/aurx_acid_cross_grey.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_grey.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-heather-grey", "title": "AURX Acid Cross Heavy Thermal - Heather Grey"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-acid-cross-heavy-thermal-heather-grey" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/14" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Acid Cross Heavy Thermal - Heather Grey?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_warstudios_skull_charcoal.jpg" alt="AURX Warstudios Dagger Skull Thermal - Charcoal" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Warstudios Dagger Skull Thermal - Charcoal</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-warstudios-dagger-skull-thermal-charcoal</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        EXCLUSIVE
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1599</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹3199</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/13" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "EXCLUSIVE", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Washed charcoal thermal sweatshirt featuring lavender purple skull biting tactical combat dagger, \u0027Warstudios Worldwide\u0027 banner, and gothic sleeve crossbones.", "discount_pct": 50, "fabric_details": "400 GSM Ultra-Heavy Vintage Washed Waffle Cotton, Soft Brushed Feel, Raw Edge Bottom Hem", "id": 13, "image_list": ["static/uploads/aurx_warstudios_skull_charcoal.jpg"], "images": "[\"static/uploads/aurx_warstudios_skull_charcoal.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_warstudios_skull_charcoal.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-warstudios-dagger-skull-thermal-charcoal", "title": "AURX Warstudios Dagger Skull Thermal - Charcoal"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-warstudios-dagger-skull-thermal-charcoal" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/13" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Warstudios Dagger Skull Thermal - Charcoal?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_misery_racing_white.jpg" alt="AURX Misery Club Racing Thermal - Optic White" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Misery Club Racing Thermal - Optic White</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-misery-club-racing-thermal-optic-white</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        MOTORSPORT
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1499</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹2999</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/12" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "MOTORSPORT", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Clean optic white thermal racing sweatshirt with multi-color Misery Club racing team graphics, checkered speed flags, number 1 emblem, and racing typography.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Thermal Weave, Multi-Color Plastisol Print, Reinforced Drop Shoulder Fit", "id": 12, "image_list": ["static/uploads/aurx_misery_racing_white.jpg"], "images": "[\"static/uploads/aurx_misery_racing_white.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_misery_racing_white.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-misery-club-racing-thermal-optic-white", "title": "AURX Misery Club Racing Thermal - Optic White"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-misery-club-racing-thermal-optic-white" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/12" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Misery Club Racing Thermal - Optic White?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_praying_hands_red.jpg" alt="AURX Praying Hands Rosary Thermal - Crimson Red" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Praying Hands Rosary Thermal - Crimson Red</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-praying-hands-rosary-thermal-crimson-red</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        LIMITED DROP
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1599</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹3199</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/11" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "LIMITED DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Statement crimson red thermal long-sleeve sweatshirt with vintage woodcut Praying Hands, crucifix rosary, and gothic scripture lettering on sleeves.", "discount_pct": 50, "fabric_details": "380 GSM Heavy Combed Cotton Waffle Knit, Deep Crimson Reactive Dye, Double Ribbed Cuffs", "id": 11, "image_list": ["static/uploads/aurx_praying_hands_red.jpg"], "images": "[\"static/uploads/aurx_praying_hands_red.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_praying_hands_red.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-praying-hands-rosary-thermal-crimson-red", "title": "AURX Praying Hands Rosary Thermal - Crimson Red"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-praying-hands-rosary-thermal-crimson-red" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/11" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Praying Hands Rosary Thermal - Crimson Red?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_gothic_cross_maroon.jpg" alt="AURX Gothic Cross 777 Thermal - Deep Maroon" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Gothic Cross 777 Thermal - Deep Maroon</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-gothic-cross-777-thermal-deep-maroon</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        NEW DROP
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1499</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹2999</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/10" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "NEW DROP", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Burgundy maroon thermal knit sweatshirt with cyan blue gothic cross and script scripture chest print, highlighted with angel number \u0027777\u0027 sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Premium Thermal Waffle Weave, Cyan High-Density Silkscreen, Anti-Shrink Wash", "id": 10, "image_list": ["static/uploads/aurx_gothic_cross_maroon.jpg"], "images": "[\"static/uploads/aurx_gothic_cross_maroon.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_gothic_cross_maroon.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-gothic-cross-777-thermal-deep-maroon", "title": "AURX Gothic Cross 777 Thermal - Deep Maroon"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-gothic-cross-777-thermal-deep-maroon" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/10" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Gothic Cross 777 Thermal - Deep Maroon?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_duende_dragon_cream.jpg" alt="AURX Duende Axolotl Thermal - Ecru Cream" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Duende Axolotl Thermal - Ecru Cream</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-duende-axolotl-thermal-ecru-cream</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        TRENDING
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1499</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹2999</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/9" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "TRENDING", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Off-white / cream heavyweight thermal waffle sweatshirt with dual circular dragon axolotl screenprint in crimson red and black, framed by barbed flame sleeve graphics.", "discount_pct": 50, "fabric_details": "380 GSM Heavyweight Waffle Knit, 100% Combed Cotton, Ribbed Mock Collar, Reactive Pigment Dyed", "id": 9, "image_list": ["static/uploads/aurx_duende_dragon_cream.jpg"], "images": "[\"static/uploads/aurx_duende_dragon_cream.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 2999, "price": 1499, "primary_image": "static/uploads/aurx_duende_dragon_cream.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-duende-axolotl-thermal-ecru-cream", "title": "AURX Duende Axolotl Thermal - Ecru Cream"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-duende-axolotl-thermal-ecru-cream" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/9" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Duende Axolotl Thermal - Ecru Cream?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <!-- Photo & Title -->
+                            <td class="p-4 flex items-center gap-3">
+                                <img src="static/uploads/aurx_acid_cross_black.jpg" alt="AURX Acid Cross Heavy Thermal - Pitch Black" class="w-14 h-16 rounded-xl object-cover bg-black border border-white/10 flex-shrink-0 shadow-md">
+                                <div>
+                                    <div class="font-bold text-white text-sm">AURX Acid Cross Heavy Thermal - Pitch Black</div>
+                                    <div class="text-neutral-500 text-[10px] font-mono mt-0.5">/product/aurx-acid-cross-heavy-thermal-pitch-black</div>
+                                    
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-white border border-white/15">
+                                        BESTSELLER
+                                    </span>
+                                    
+                                </div>
+                            </td>
+
+                            <!-- Category -->
+                            <td class="p-4 text-neutral-300 font-medium whitespace-nowrap">
+                                Hoodies &amp; Sweatshirts
+                            </td>
+
+                            <!-- Price -->
+                            <td class="p-4 font-mono font-bold text-white whitespace-nowrap">
+                                <span class="text-emerald-400 text-sm">₹1599</span>
+                                
+                                <span class="line-through text-neutral-500 font-normal ml-1.5 text-xs">₹3199</span>
+                                
+                            </td>
+
+                            <!-- Sizes -->
+                            <td class="p-4 font-mono text-neutral-300 whitespace-nowrap">
+                                M,L,XL,XXL
+                            </td>
+
+                            <!-- Stock Toggle Button -->
+                            <td class="p-4 whitespace-nowrap">
+                                <form action="/admin/product/toggle-stock/8" method="POST" class="inline">
+                                    <button 
+                                        type="submit" 
+                                        class="px-3 py-1.5 rounded-full text-[10px] font-mono font-bold transition flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                                        title="Click to toggle In Stock / Out of Stock"
+                                    >
+                                        
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span>In Stock</span>
+                                        
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Actions: Edit, View Live, Delete -->
+                            <td class="p-4 text-right whitespace-nowrap">
+                                <button 
+                                    onclick='openEditModal({"badge": "BESTSELLER", "category": "Hoodies \u0026 Sweatshirts", "created_at": "2026-11-23 16:18:19", "description": "Pitch black heavyweight waffle thermal sweatshirt featuring iconic distressed acid-lime Maltese cross front graphic and gothic sleeve calligraphy. Engineered with tailored drop-shoulder cut.", "discount_pct": 50, "fabric_details": "400 GSM Heavyweight Waffle Cotton, Vintage Acid Wash Finish, Pre-Shrunk, Double-Needle Stitched Hem", "id": 8, "image_list": ["static/uploads/aurx_acid_cross_black.jpg"], "images": "[\"static/uploads/aurx_acid_cross_black.jpg\"]", "in_stock": 1, "is_featured": 1, "original_price": 3199, "price": 1599, "primary_image": "static/uploads/aurx_acid_cross_black.jpg", "size_list": ["M", "L", "XL", "XXL"], "sizes": "M,L,XL,XXL", "slug": "aurx-acid-cross-heavy-thermal-pitch-black", "title": "AURX Acid Cross Heavy Thermal - Pitch Black"})'
+                                    class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black font-semibold text-xs transition mr-2"
+                                    title="Edit Product Details & Photo"
+                                >
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+
+                                <a 
+                                    href="/product/aurx-acid-cross-heavy-thermal-pitch-black" 
+                                    target="_blank" 
+                                    class="p-2 text-neutral-400 hover:text-white transition inline-block mr-1" 
+                                    title="View on Live Store"
+                                >
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+
+                                <form action="/admin/product/delete/8" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete AURX Acid Cross Heavy Thermal - Pitch Black?');">
+                                    <button type="submit" class="p-2 text-neutral-500 hover:text-red-400 transition" title="Delete Product">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 1: ADD NEW CLOTHES (Optimized for iPhone 15 Touch & Viewport) -->
+    <!-- =================================================================== -->
+    <div id="addProductModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-[#121217] border border-white/[0.1] rounded-3xl max-w-lg w-full p-5 sm:p-8 max-h-[88vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
+                <h3 class="font-heading font-black text-base uppercase tracking-wider text-white">Add New Clothes</h3>
+                <button onclick="closeModal('addProductModal')" class="text-neutral-400 hover:text-white text-2xl leading-none p-1">&times;</button>
+            </div>
+
+            <form action="/admin/product/add" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Title</label>
+                    <input type="text" name="title" required placeholder="e.g. Cyber Chrome Heavyweight Tee" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Category</label>
+                        <input type="text" name="category" required placeholder="Oversized T-Shirts" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Selling Price (₹)</label>
+                        <input type="number" name="price" required placeholder="999" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Original Price (₹) <span class="text-neutral-500 font-normal">Optional</span></label>
+                        <input type="number" name="original_price" placeholder="1999" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Badge <span class="text-neutral-500 font-normal">Optional</span></label>
+                        <input type="text" name="badge" placeholder="BESTSELLER / NEW" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Available Sizes (Comma separated)</label>
+                    <input type="text" name="sizes" value="S,M,L,XL,XXL" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Description</label>
+                    <textarea name="description" rows="2" placeholder="Streetwear product description..." class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Fabric Specifications</label>
+                    <input type="text" name="fabric_details" placeholder="240 GSM 100% Combed Cotton, Pre-shrunk" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Upload Product Photos</label>
+                    <input type="file" name="images" multiple accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20">
+                </div>
+
+                <div class="flex items-center gap-6 pt-1">
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="in_stock" value="1" checked class="rounded bg-black border-white/20 text-white">
+                        <span>In Stock</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="is_featured" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>Feature on Homepage</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl mt-3 active:scale-95">
+                    Save New Clothes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 2: EDIT EXISTING CLOTHES (Optimized for iPhone 15 Touch)      -->
+    <!-- =================================================================== -->
+    <div id="editProductModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-[#121217] border border-white/[0.1] rounded-3xl max-w-lg w-full p-5 sm:p-8 max-h-[88vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
+                <h3 class="font-heading font-black text-base uppercase tracking-wider text-white">Edit Clothes Details</h3>
+                <button onclick="closeModal('editProductModal')" class="text-neutral-400 hover:text-white text-2xl leading-none p-1">&times;</button>
+            </div>
+
+            <form id="editProductForm" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <input type="hidden" name="existing_images" id="editExistingImages">
+
+                <!-- Current Photo Preview -->
+                <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-black/40 border border-white/[0.06]">
+                    <img id="editImagePreview" src="" alt="Preview" class="w-14 h-18 sm:w-16 sm:h-20 rounded-xl object-cover bg-black border border-white/10 shadow-md shrink-0">
+                    <div>
+                        <span class="text-xs text-white font-bold block mb-0.5">Current Image</span>
+                        <span class="text-[10px] text-neutral-400 block">Nayi photo upload karne par ye replace ho jayegi.</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Title</label>
+                    <input type="text" name="title" id="editTitle" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Category</label>
+                        <input type="text" name="category" id="editCategory" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Selling Price (₹)</label>
+                        <input type="number" name="price" id="editPrice" required class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Original Price (₹)</label>
+                        <input type="number" name="original_price" id="editOriginalPrice" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Badge</label>
+                        <input type="text" name="badge" id="editBadge" placeholder="BESTSELLER" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Available Sizes (Comma separated)</label>
+                    <input type="text" name="sizes" id="editSizes" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs font-mono focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Product Description</label>
+                    <textarea name="description" id="editDescription" rows="2" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Fabric Specifications</label>
+                    <input type="text" name="fabric_details" id="editFabricDetails" class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-2.5 px-3.5 text-white text-base sm:text-xs focus:outline-none focus:border-white">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] uppercase tracking-wider font-bold text-neutral-300 mb-1">Upload New Photo (Optional)</label>
+                    <input type="file" name="new_images" multiple accept="image/*" class="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20">
+                </div>
+
+                <div class="flex items-center gap-6 pt-1">
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="in_stock" id="editInStock" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>In Stock</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-neutral-300 cursor-pointer">
+                        <input type="checkbox" name="is_featured" id="editIsFeatured" value="1" class="rounded bg-black border-white/20 text-white">
+                        <span>Feature on Homepage</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl mt-3 active:scale-95">
+                    Update Clothes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript for Modals -->
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function openAddModal() {
+            openModal('addProductModal');
+        }
+
+        function openEditModal(product) {
+            const form = document.getElementById('editProductForm');
+            form.action = '/admin/product/edit/' + product.id;
+            
+            document.getElementById('editTitle').value = product.title || '';
+            document.getElementById('editCategory').value = product.category || '';
+            document.getElementById('editPrice').value = product.price || '';
+            document.getElementById('editOriginalPrice').value = product.original_price || '';
+            document.getElementById('editBadge').value = product.badge || '';
+            document.getElementById('editSizes').value = product.sizes || 'S,M,L,XL';
+            document.getElementById('editDescription').value = product.description || '';
+            document.getElementById('editFabricDetails').value = product.fabric_details || '';
+            document.getElementById('editExistingImages').value = JSON.stringify(product.image_list || []);
+            document.getElementById('editImagePreview').src = product.primary_image || 'static/images/logo.jpg';
+            document.getElementById('editInStock').checked = product.in_stock === 1;
+            document.getElementById('editIsFeatured').checked = product.is_featured === 1;
+
+            openModal('editProductModal');
+        }
+    </script>
+</div></body>
+</html>

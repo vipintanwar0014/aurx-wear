@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Atelier // Direct Concierge — AURX.WEAR{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+    
+    <!-- Breadcrumb Path -->
+    <nav class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 mb-6 sm:mb-8">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <span class="text-neutral-600">/</span>
+        <span class="text-white">Contact Atelier</span>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-neutral-300 font-bold mb-3 sm:mb-4">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>AURX WEAR // DIRECT CONCIERGE</span>
+        </div>
+        <h1 class="font-heading font-black text-2xl sm:text-4xl lg:text-5xl text-white uppercase tracking-tight mb-2 sm:mb-3">
+            GET IN TOUCH
+        </h1>
+        <p class="font-heading font-extrabold text-xs sm:text-sm text-neutral-400 uppercase tracking-widest mb-3">
+            WEAR MORE. STAND OUT.
+        </p>
+        <p class="text-neutral-400 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
+            Direct channels for sizing assistance, custom orders, drop updates, and brand inquiries. Connect with our atelier team instantly.
+        </p>
+    </div>
+
+    <!-- 3 Direct Contact Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-10 sm:mb-14">
+        
+        <!-- 1. Direct WhatsApp Concierge (Featured Card) -->
+        <div class="bg-[#111116] border border-emerald-500/30 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-emerald-500/60 transition-all">
+            <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <span class="text-[9px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full font-bold border border-emerald-500/20">
+                        Fastest Reply
+                    </span>
+                </div>
+                <h3 class="font-heading font-black text-base sm:text-lg text-white uppercase tracking-wider mb-1">
+                    WhatsApp Chat
+                </h3>
+                <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+                    Direct 1-on-1 chat for sizing, instant orders, and inventory check.
+                </p>
+                <div class="font-mono text-sm sm:text-base font-bold text-white mb-5 tracking-wide">
+                    +91 7851891611
+                </div>
+            </div>
+            
+            <a 
+                href="https://api.whatsapp.com/send?phone={{ settings.whatsapp_number }}&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry%20regarding%20products." 
+                onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }"
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-500/20 active:scale-95"
+            >
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Open WhatsApp</span>
+            </a>
+        </div>
+
+        <!-- 2. Direct Phone Call -->
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl group hover:border-blue-500/40 transition-all">
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <span class="text-[9px] font-mono uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full font-bold border border-blue-500/20">
+                        Voice Call
+                    </span>
+                </div>
+                <h3 class="font-heading font-black text-base sm:text-lg text-white uppercase tracking-wider mb-1">
+                    Phone Support
+                </h3>
+                <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+                    Speak directly with our concierge team during active atelier hours.
+                </p>
+                <div class="font-mono text-sm sm:text-base font-bold text-white mb-5 tracking-wide">
+                    +91 7851891611
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <a 
+                    href="tel:+917851891611" 
+                    class="flex-1 py-3 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95"
+                >
+                    <i class="fa-solid fa-phone text-[10px]"></i>
+                    <span>Call Now</span>
+                </a>
+                <button 
+                    type="button" 
+                    onclick="copyToClipboard('+917851891611', this)"
+                    class="py-3 px-3.5 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition cursor-pointer"
+                    title="Copy Number"
+                >
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Official Email / Gmail -->
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl group hover:border-red-500/40 transition-all">
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <span class="text-[9px] font-mono uppercase tracking-wider text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full font-bold border border-red-500/20">
+                        Official Email
+                    </span>
+                </div>
+                <h3 class="font-heading font-black text-base sm:text-lg text-white uppercase tracking-wider mb-1">
+                    Email Atelier
+                </h3>
+                <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+                    For wholesale inquiries, collaborations, and formal requests.
+                </p>
+                <div class="font-mono text-xs sm:text-sm font-bold text-white mb-5 tracking-wide truncate">
+                    {{ settings.email }}
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <a 
+                    href="mailto:{{ settings.email }}?subject=Inquiry%20-%20AURX%20WEAR" 
+                    class="flex-1 py-3 px-3 rounded-xl bg-white hover:bg-neutral-200 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95"
+                >
+                    <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                    <span>Email Us</span>
+                </a>
+                <button 
+                    type="button" 
+                    onclick="copyToClipboard('{{ settings.email }}', this)"
+                    class="py-3 px-3.5 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition cursor-pointer"
+                    title="Copy Email"
+                >
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Atelier Details & Message Section -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+        
+        <!-- Left: Quick Direct Message Form -->
+        <div class="md:col-span-7 bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 shadow-xl">
+            <h2 class="font-heading font-black text-lg sm:text-xl text-white uppercase tracking-tight mb-1">
+                Send a Direct Message
+            </h2>
+            <p class="text-xs text-neutral-400 mb-6">
+                Fill this out to start a conversation or tap "Send via WhatsApp".
+            </p>
+
+            <form id="contactPageForm" onsubmit="handleContactPageSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1.5 font-bold">Your Name</label>
+                    <input 
+                        type="text" 
+                        id="contactName" 
+                        required 
+                        placeholder="e.g. Rahul Sharma" 
+                        class="w-full bg-[#181820] border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white transition"
+                    >
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1.5 font-bold">Phone or WhatsApp Number</label>
+                    <input 
+                        type="tel" 
+                        id="contactPhone" 
+                        required 
+                        placeholder="e.g. +91 9876543210" 
+                        class="w-full bg-[#181820] border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white transition"
+                    >
+                </div>
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1.5 font-bold">Message or Inquiry</label>
+                    <textarea 
+                        id="contactMessage" 
+                        rows="4" 
+                        required 
+                        placeholder="Tell us what product you're looking for, sizing queries, or order details..." 
+                        class="w-full bg-[#181820] border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-white transition resize-none"
+                    ></textarea>
+                </div>
+
+                <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                    <button 
+                        type="button" 
+                        onclick="sendFormViaWhatsApp()"
+                        class="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
+                    >
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Send via WhatsApp</span>
+                    </button>
+                    <button 
+                        type="submit" 
+                        id="submitContactBtn"
+                        class="flex-1 py-3 px-4 rounded-xl bg-white hover:bg-neutral-200 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
+                    >
+                        <span>Submit Inquiry</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+
+                <div id="contactFormSuccess" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs text-center font-medium">
+                    ✓ Thank you! Your message has been received. Our team will contact you shortly.
+                </div>
+            </form>
+        </div>
+
+        <!-- Right: Atelier Schedule & Assurances -->
+        <div class="md:col-span-5 space-y-4">
+            
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+                <h3 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-neutral-400"></i>
+                    <span>Atelier Operating Hours</span>
+                </h3>
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between py-1 border-b border-white/[0.06]">
+                        <span class="text-neutral-400">Monday – Saturday</span>
+                        <span class="font-mono text-white font-medium">10:00 AM – 10:00 PM</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-white/[0.06]">
+                        <span class="text-neutral-400">Sunday</span>
+                        <span class="font-mono text-white font-medium">11:00 AM – 08:00 PM</span>
+                    </div>
+                    <div class="flex justify-between py-1">
+                        <span class="text-neutral-400">Online WhatsApp</span>
+                        <span class="font-mono text-emerald-400 font-bold">24/7 Monitored</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-6 shadow-xl space-y-3">
+                <h3 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-neutral-400"></i>
+                    <span>Our Brand Promise</span>
+                </h3>
+                <div class="space-y-2.5 text-xs text-neutral-400">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+                        <span>100% Heavyweight Custom Fabrics</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+                        <span>Dispatched directly from Jaipur atelier</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+                        <span>Easy replacement / sizing exchanges</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function sendFormViaWhatsApp() {
+        const name = document.getElementById('contactName').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        const msg = document.getElementById('contactMessage').value.trim();
+        
+        let text = "Hello AURX WEAR! I would like to get in touch.";
+        if (name) text += "\nName: " + name;
+        if (phone) text += "\nContact: " + phone;
+        if (msg) text += "\nMessage: " + msg;
+
+        // Track lead
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/api/track-lead', JSON.stringify({
+                channel: 'WhatsApp Contact Form',
+                product_title: 'Direct Concierge Page',
+                customer_name: name || 'Online Customer',
+                contact: phone,
+                message: msg
+            }));
+        }
+
+        const url = "https://api.whatsapp.com/send?phone={{ settings.whatsapp_number }}&text=" + encodeURIComponent(text);
+        if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) {
+            window.location.href = url;
+        } else {
+            window.open(url, '_blank');
+        }
+    }
+
+    async function handleContactPageSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('contactName').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        const msg = document.getElementById('contactMessage').value.trim();
+        const btn = document.getElementById('submitContactBtn');
+        const successBox = document.getElementById('contactFormSuccess');
+
+        btn.disabled = true;
+        btn.innerHTML = '<span>Submitting...</span>';
+
+        try {
+            await fetch('/api/track-lead', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    channel: 'Direct Contact Form',
+                    product_title: 'Direct Concierge Page',
+                    customer_name: name,
+                    contact: phone,
+                    message: msg
+                })
+            });
+
+            successBox.classList.remove('hidden');
+            document.getElementById('contactPageForm').reset();
+            btn.innerHTML = '<span>Message Sent!</span>';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Submit Inquiry</span><i class="fa-solid fa-arrow-right text-[10px]"></i>';
+            }, 3000);
+        } catch (err) {
+            console.error(err);
+            btn.disabled = false;
+            btn.innerHTML = '<span>Submit Inquiry</span>';
+            alert('Your message was recorded. You can also reach us directly via WhatsApp.');
+        }
+    }
+</script>
+{% endblock %}

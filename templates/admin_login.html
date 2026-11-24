@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Command Center Login — {{ settings.store_name }}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#08080A',
+                            dark: '#0E0E13',
+                            card: '#121217',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Syne', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#08080A] text-white font-sans antialiased min-h-screen flex items-center justify-center p-4 relative overflow-hidden selection:bg-white selection:text-black">
+
+    <!-- Atmospheric ambient glow -->
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-white/[0.03] rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute -bottom-40 right-10 w-[400px] h-[300px] bg-emerald-500/[0.02] rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="w-full max-w-md bg-[#111116] border border-white/[0.08] rounded-3xl p-8 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative z-10 backdrop-blur-xl">
+        
+        <!-- Header with High-Definition Metallic Logo -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 rounded-2xl bg-black border border-white/10 mx-auto p-2 mb-4 shadow-2xl flex items-center justify-center">
+                <img src="/static/images/navbar_logo_hd.png" alt="AURX Logo" class="w-full h-full object-contain filter drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">
+            </div>
+            
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-mono text-[10px] text-neutral-300 font-bold uppercase tracking-[0.2em]">Encrypted Command Portal</span>
+            </div>
+
+            <h1 class="font-heading font-black text-2xl tracking-tight uppercase text-white mt-1">{{ settings.store_name }}</h1>
+            <p class="text-xs text-neutral-400 tracking-wide mt-1">Authorized Atelier Management Only</p>
+        </div>
+
+        {% if is_locked %}
+        <!-- Brute Force Lockout Alert -->
+        <div class="mb-6 p-4 rounded-2xl bg-red-950/40 border border-red-500/40 text-red-300 text-xs text-center font-medium shadow-lg">
+            <div class="flex items-center justify-center gap-2 mb-1.5 text-red-400 font-bold text-sm">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>SECURITY LOCKOUT ACTIVE</span>
+            </div>
+            <p>Maximum failed attempts exceeded. Access has been temporarily locked for 15 minutes to safeguard this portal.</p>
+        </div>
+        {% elif error %}
+        <!-- Normal Error Alert -->
+        <div class="mb-6 p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs text-center font-medium flex items-center justify-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Secure Form -->
+        <form action="/admin/login" method="POST" class="space-y-5">
+            <div>
+                <label for="password" class="block text-[11px] uppercase tracking-[0.15em] font-bold text-neutral-300 mb-2">
+                    Master Security Key
+                </label>
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        required 
+                        {% if not is_locked %}autofocus{% else %}disabled{% endif %}
+                        placeholder="••••••••••••" 
+                        class="w-full bg-[#0a0a0d] border border-white/10 rounded-xl py-3.5 px-4 text-white text-sm focus:outline-none focus:border-white transition pr-11 font-mono tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="togglePasswordVisibility()"
+                        class="absolute right-3.5 top-3.5 text-neutral-400 hover:text-white text-sm transition"
+                        title="Toggle visibility"
+                    >
+                        <i id="eyeIcon" class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button 
+                type="submit" 
+                {% if is_locked %}disabled{% endif %}
+                class="w-full py-4 rounded-xl bg-white text-black font-heading font-black text-xs uppercase tracking-[0.2em] hover:bg-neutral-200 transition shadow-[0_10px_25px_rgba(255,255,255,0.15)] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+                Authenticate & Unlock
+            </button>
+        </form>
+
+        <!-- Security Specifications Pill -->
+        <div class="mt-6 pt-5 border-t border-white/[0.06] flex items-center justify-between text-[10px] text-neutral-500 font-mono">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-lock text-emerald-400"></i> PBKDF2-SHA256
+            </span>
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-virus text-neutral-400"></i> Brute-Force Guard
+            </span>
+            <span class="text-neutral-400">200K Iter</span>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="/" class="text-xs text-neutral-400 hover:text-white transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left text-[10px]"></i> Return to Storefront
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

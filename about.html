@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden max-w-[100vw]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>About Us // Luxury Heavyweight Streetwear — AURX.WEAR</title>
+    <meta name="description" content="AURX.WEAR - Premium Fashion. Premium You. Heavyweight Streetwear & Luxury Essentials.">
+    
+    <!-- Google Fonts: Montserrat + Inter + Syne -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        aurx: {
+                            black: '#0A0A0C',
+                            dark: '#0E0E12',
+                            card: '#121216',
+                            cardHover: '#18181E',
+                            border: '#222228',
+                            borderLight: 'rgba(255, 255, 255, 0.12)',
+                            whatsapp: '#25D366'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Montserrat', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="static/css/custom.css?v=4">
+</head>
+<body class="bg-aurx-black text-white font-sans antialiased min-h-screen flex flex-col selection:bg-white selection:text-black overflow-x-hidden w-full max-w-[100vw]">
+
+    <!-- Main Navigation Bar (Unified Fixed Layout - 100% Stable on Scroll) -->
+    <header id="siteHeader" class="fixed top-0 left-0 right-0 z-40 glossy-header transition-all duration-300">
+        <div class="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 h-12 sm:h-16 flex items-center justify-between gap-3 sm:gap-6">
+            
+            <!-- Left: Brand Logo (Exact Mockup Match) -->
+            <a href="/" class="flex items-center gap-3 group shrink-0">
+                <div class="h-8 sm:h-12 w-auto flex items-center">
+                    <img src="static/images/navbar_logo_hd.png" alt="AURX WEAR" class="h-7 sm:h-11 w-auto object-contain filter brightness-110">
+                </div>
+            </a>
+
+            <!-- Center: Navigation Links (Visible on Tablet & Desktop) -->
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium tracking-wide">
+                <a href="/" class="text-white hover:text-white transition pb-1 font-semibold">Home</a>
+                <a href="/#shop" class="text-neutral-400 hover:text-white transition pb-1">Shop</a>
+                <a href="/#categories" class="text-neutral-400 hover:text-white transition pb-1">Collections</a>
+                <a href="/about" class="text-neutral-400 hover:text-white transition pb-1">About</a>
+                <a href="/#contact" onclick="if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="text-neutral-400 hover:text-white transition pb-1">Contact</a>
+            </nav>
+
+            <!-- Right: Search Bar, Profile, Cart, Mobile Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+                
+                <!-- Search Bar -->
+                <form action="/#shop" method="GET" class="relative hidden sm:block w-40 md:w-56">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        value="" 
+                        placeholder="Search products..." 
+                        class="w-full bg-[#131317] border border-aurx-border rounded-full py-2 pl-9 pr-4 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-400 transition"
+                    >
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-neutral-500 text-xs"></i>
+                </form>
+
+                <!-- Profile / Admin Portal -->
+                <a 
+                    href="admin.html" 
+                    title="Owner / Admin Portal" 
+                    class="w-8 h-8 sm:w-9 sm:h-9 rounded-full hover:bg-neutral-900 border border-transparent hover:border-aurx-border flex items-center justify-center text-neutral-300 hover:text-white transition"
+                >
+                    <i class="fa-regular fa-user text-xs sm:text-sm"></i>
+                </a>
+
+                <!-- Shopping Bag Icon (Untouchable / Display Only - No Click Action) -->
+                <div 
+                    title="Cart (Empty)" 
+                    class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-transparent flex items-center justify-center text-neutral-400 cursor-default select-none pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <i class="fa-solid fa-bag-shopping text-xs sm:text-sm"></i>
+                    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white text-black font-bold text-[8px] sm:text-[9px] flex items-center justify-center">
+                        0
+                    </span>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <button 
+                    type="button" 
+                    onclick="toggleMobileNav()"
+                    class="md:hidden w-8 h-8 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-white"
+                    aria-label="Toggle navigation"
+                >
+                    <i id="mobileMenuIcon" class="fa-solid fa-bars text-xs"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Mobile Quick Subnav Bar (Always visible & stable on iPhone 15 / Mobile) -->
+        <nav id="mobileSubnavBar" class="md:hidden flex items-center justify-around px-3 py-2 border-t border-white/[0.08] bg-black/95 text-[10.5px] font-heading font-bold uppercase tracking-wider">
+            <a href="/" class="text-white hover:text-neutral-300 transition py-0.5">Home</a>
+            <a href="/#categories" class="text-neutral-400 hover:text-white transition py-0.5">Collections</a>
+            <a href="/#shop" class="text-neutral-400 hover:text-white transition py-0.5">Shop</a>
+            <a href="/about" class="text-neutral-400 hover:text-white transition py-0.5">About</a>
+            <a href="/#contact" onclick="if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="text-neutral-400 hover:text-white transition py-0.5">Contact</a>
+        </nav>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileNavMenu" class="hidden md:hidden border-t border-aurx-border/80 bg-black/95 px-5 py-4 space-y-3">
+            <a href="/" onclick="toggleMobileNav()" class="block text-white font-semibold text-sm">Home</a>
+            <a href="/#categories" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">Collections</a>
+            <a href="/#shop" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">Shop</a>
+            <a href="/about" onclick="toggleMobileNav()" class="block text-neutral-400 hover:text-white text-sm">About Us</a>
+            <a href="/#contact" onclick="toggleMobileNav(); if(window.location.pathname === '/') { const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } } else { window.location.href = '/#contact'; return false; }" class="block text-neutral-400 hover:text-white text-sm">Contact Us</a>
+        </div>
+    </header>
+
+    <script>
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobileNavMenu');
+            const icon = document.getElementById('mobileMenuIcon');
+            const subnav = document.getElementById('mobileSubnavBar');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (subnav) subnav.classList.add('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                if (subnav) subnav.classList.remove('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+    </script>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-[78px] md:pt-16">
+        
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-16">
+    
+    <!-- Minimalist Breadcrumb -->
+    <nav class="flex items-center gap-2 text-[11px] sm:text-xs font-mono uppercase tracking-wider text-neutral-400 mb-6 sm:mb-10">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <span class="text-neutral-600">/</span>
+        <span class="text-white font-semibold">About Us</span>
+    </nav>
+
+    <!-- Editorial Hero Showcase -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-6 sm:gap-8 lg:gap-14 mb-10 sm:mb-20">
+        
+        <!-- Left: Macro Craftsmanship Photo -->
+        <div class="lg:col-span-6 rounded-2xl sm:rounded-3xl overflow-hidden bg-black shadow-2xl border border-white/[0.08] aspect-[4/3] sm:aspect-[5/4] relative group">
+            <img 
+                src="static/images/about_collar_ultra_hd.jpg" 
+                alt="AURX Streetwear Craftsmanship" 
+                class="w-full h-full object-cover filter contrast-110 brightness-105 group-hover:scale-105 transition-transform duration-700 ease-out" 
+                fetchpriority="high"
+                decoding="async"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+            <div class="absolute bottom-3.5 left-3.5 sm:bottom-6 sm:left-6 right-3.5">
+                <span class="text-[9.5px] sm:text-xs font-mono uppercase tracking-[0.25em] text-emerald-400 font-bold block mb-1">
+                    ATELIER STANDARD // 400 GSM
+                </span>
+                <p class="font-heading font-black text-xs sm:text-lg text-white uppercase tracking-tight">
+                    Engineered Precision & Heavy Thermal Weave
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: Authentic Fashion Narrative -->
+        <div class="lg:col-span-6 space-y-4 sm:space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-neutral-300 font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>BRAND MANIFESTO</span>
+            </div>
+
+            <h1 class="font-heading font-black text-2xl sm:text-5xl lg:text-6xl text-white uppercase tracking-tight leading-tight">
+                MORE THAN JUST CLOTHES.
+            </h1>
+
+            <p class="font-heading font-extrabold text-xs sm:text-base text-neutral-400 uppercase tracking-widest">
+                WEAR MORE. STAND OUT.
+            </p>
+
+            <p class="text-neutral-300 text-xs sm:text-base leading-relaxed font-normal">
+                AURX.WEAR is a high-fashion streetwear label built for the bold, the confident, and the ones who never settle. Born out of an obsession with custom heavyweight textures, tailored drop-shoulder cuts, and signature metallic chrome aesthetics.
+            </p>
+
+            <p class="text-neutral-400 text-xs sm:text-sm leading-relaxed font-normal">
+                Every drop is manufactured in limited batches using 380 to 400 GSM custom combed cotton thermal weaves, reactive dye treatments, and hand-finished acid distressing. We reject flimsy fast-fashion — every piece is engineered to hold its weight, shape, and attitude for years.
+            </p>
+
+            <div class="pt-2 sm:pt-4 flex items-center gap-3">
+                <a 
+                    href="/#shop" 
+                    class="flex-1 sm:flex-initial text-center px-6 sm:px-9 py-3 sm:py-3.5 rounded-full bg-white text-black font-heading font-black text-xs uppercase tracking-wider hover:bg-neutral-200 transition shadow-xl hover:scale-[1.02] active:scale-95 inline-flex items-center justify-center gap-2"
+                >
+                    <span>Shop Drops</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+                <a 
+                    href="/#categories" 
+                    class="flex-1 sm:flex-initial text-center px-5 sm:px-8 py-3 sm:py-3.5 rounded-full bg-transparent border border-neutral-700 text-white font-heading font-bold text-xs uppercase tracking-wider hover:border-white transition hover:scale-[1.02] active:scale-95"
+                >
+                    <span>Collections</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3 Pillars of AURX -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 mb-10 sm:mb-20">
+        
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Heavyweight Thermal Weaves
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Constructed with 380-400 GSM pure combed waffle cotton. Dense, breathable, and structured with unmatched hand-feel.
+            </p>
+        </div>
+
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-cube"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Architectural Drop Silhouette
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Engineered boxy drape with lowered armholes and widened torso proportions designed to flatter every body type.
+            </p>
+        </div>
+
+        <div class="bg-[#111116] border border-white/[0.08] rounded-2xl p-5 sm:p-8 space-y-2.5 sm:space-y-3 shadow-xl">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white text-lg sm:text-xl">
+                <i class="fa-solid fa-spray-can"></i>
+            </div>
+            <h3 class="font-heading font-black text-sm sm:text-lg text-white uppercase tracking-wider">
+                Acid Distressing & Graphics
+            </h3>
+            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Hand-washed vintage mineral treatments paired with high-density screenprinted graphics and metallic accents.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Direct Concierge Banner (Clean, Professional, No Phone Number Displayed) -->
+    <div class="bg-gradient-to-b sm:bg-gradient-to-r from-[#111116] via-[#16161D] to-[#111116] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center max-w-3xl mx-auto shadow-2xl space-y-3.5 sm:space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-emerald-400 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>DIRECT ATELIER CONCIERGE</span>
+        </div>
+        <h2 class="font-heading font-black text-xl sm:text-3xl lg:text-4xl text-white uppercase tracking-tight">
+            BESPOKE SIZING & ATELIER ASSISTANCE
+        </h2>
+        <p class="text-neutral-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+            Have questions about fit, fabric weight, or upcoming drops? Connect directly with our atelier team on WhatsApp for instant assistance.
+        </p>
+        <div class="pt-2 flex justify-center">
+            <a 
+                href="https://api.whatsapp.com/send?phone=917851891611&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry%20regarding%20products."
+                onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }"
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-heading font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all duration-300 active:scale-95 hover:scale-[1.02] cursor-pointer"
+            >
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Chat on WhatsApp</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="scroll-mt-14 bg-black border-t border-aurx-border mt-6 sm:mt-14 pt-8 sm:pt-14 pb-4 sm:pb-6">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-10 pb-6 sm:pb-10 border-b border-aurx-border">
+                
+                <div class="md:col-span-2 space-y-3 sm:space-y-4">
+                    <img src="static/images/navbar_logo_hd.png" alt="AURX WEAR" class="h-8 sm:h-10 w-auto object-contain">
+                    <p class="text-neutral-400 text-xs sm:text-sm max-w-sm leading-relaxed">
+                        Heavyweight Streetwear &amp; Luxury Essentials. Built for the bold, the confident and the ones who never settle.
+                    </p>
+                    <div class="flex items-center gap-3 pt-1">
+                        <a href="https://api.whatsapp.com/send?phone=917851891611" onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-aurx-card border border-aurx-border flex items-center justify-center text-neutral-400 hover:text-white hover:border-white transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </a>
+                        <a href="mailto:Dheerajgurjar7788@gmail.com" class="w-9 h-9 rounded-full bg-aurx-card border border-aurx-border flex items-center justify-center text-neutral-400 hover:text-white hover:border-white transition">
+                            <i class="fa-regular fa-envelope text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links & Direct Contact (Side-by-Side on Mobile, 2 Columns on Desktop) -->
+                <div class="md:col-span-2 grid grid-cols-2 gap-4 sm:gap-10">
+                    <div>
+                        <h4 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2.5 sm:mb-4">Quick Links</h4>
+                        <ul class="space-y-2 sm:space-y-2.5 text-xs text-neutral-400">
+                            <li><a href="#shop" class="hover:text-white transition">Shop All</a></li>
+                            <li><a href="#categories" class="hover:text-white transition">Collections</a></li>
+                            <li><a href="/about" class="hover:text-white transition">About Us</a></li>
+                            <li><a href="#contact" onclick="const el = document.getElementById('contact'); if(el) { el.scrollIntoView({behavior: 'smooth'}); return false; } else { window.location.href = '/#contact'; return false; }" class="hover:text-white transition">Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-heading font-bold text-xs uppercase tracking-widest text-white mb-2.5 sm:mb-4">Direct Contact</h4>
+                        <p class="text-[11px] sm:text-xs text-neutral-400 mb-1.5 sm:mb-3">For orders & inquiries:</p>
+                        <div class="space-y-2 sm:space-y-2.5 text-xs">
+                            <a href="tel:+917851891611" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-white transition font-mono truncate">
+                                <i class="fa-solid fa-phone text-blue-400 w-3.5 sm:w-4 shrink-0"></i>
+                                <span class="truncate hidden sm:inline">+91 7851891611</span>
+                                <span class="truncate sm:hidden">Direct Call</span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=917851891611&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry." onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-emerald-400 transition font-mono truncate">
+                                <i class="fa-brands fa-whatsapp text-emerald-400 w-3.5 sm:w-4 text-sm shrink-0"></i>
+                                <span class="truncate hidden sm:inline">WhatsApp: 7851891611</span>
+                                <span class="truncate sm:hidden">Chat on WhatsApp</span>
+                            </a>
+                            <a href="mailto:Dheerajgurjar7788@gmail.com" class="flex items-center gap-1.5 sm:gap-2 text-neutral-300 hover:text-white transition font-mono truncate">
+                                <i class="fa-solid fa-envelope text-red-400 w-3.5 sm:w-4 shrink-0"></i>
+                                <span class="truncate">Dheerajgurjar7788@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-3.5 sm:pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-neutral-500 gap-1.5 sm:gap-4">
+                <p>&copy; AURX.WEAR. All rights reserved.</p>
+                <p>Wear More. Stand Out.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Luxury Contact Modal (Phone Call, WhatsApp Chat, Gmail) -->
+    <div id="contactModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300 opacity-0">
+        <!-- Backdrop click-to-close -->
+        <div class="fixed inset-0 cursor-pointer" onclick="closeContactModal()"></div>
+
+        <div class="contact-box relative bg-[#111117] border border-white/15 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(255,255,255,0.05)] z-10 transform scale-95 transition-all duration-300 space-y-6">
+            
+            <!-- Close Button -->
+            <button 
+                type="button" 
+                onclick="closeContactModal()"
+                class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-white text-neutral-400 hover:text-black border border-white/10 flex items-center justify-center text-sm transition cursor-pointer"
+                aria-label="Close"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Header -->
+            <div>
+                <div class="text-[11px] font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold mb-1.5">
+                    AURX WEAR // DIRECT CONCIERGE
+                </div>
+                <h3 class="font-heading font-black text-2xl text-white uppercase tracking-tight">
+                    GET IN TOUCH
+                </h3>
+                <p class="text-xs text-neutral-400 mt-1">
+                    Direct channel for orders, bespoke sizing, and brand inquiries:
+                </p>
+            </div>
+
+            <!-- 3 Contact Channels -->
+            <div class="space-y-3">
+                
+                <!-- 1. Direct Phone Call -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-blue-500/40 rounded-2xl p-4 transition group flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 text-base group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-blue-400 block font-semibold">Phone Call (Voice)</span>
+                            <span class="font-heading font-bold text-white text-sm sm:text-base tracking-wide block">+91 7851891611</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button 
+                            type="button"
+                            onclick="copyToClipboard('+917851891611', this)"
+                            class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+                            title="Copy Phone Number"
+                        >
+                            <i class="fa-regular fa-copy text-xs"></i>
+                            <span class="text-[11px]">Copy</span>
+                        </button>
+                        <a 
+                            href="tel:+917851891611"
+                            class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-bold uppercase tracking-wider transition shadow-md flex items-center gap-1.5"
+                        >
+                            <i class="fa-solid fa-phone text-[10px]"></i>
+                            <span>Call</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 2. WhatsApp Chat -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-emerald-500/40 rounded-2xl p-4 transition group flex items-center justify-between gap-3 shadow-lg">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-lg group-hover:scale-105 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Instant WhatsApp Chat</span>
+                            <span class="font-heading font-bold text-white text-sm sm:text-base tracking-wide block">+91 7851891611</span>
+                        </div>
+                    </div>
+                    <a 
+                        href="https://api.whatsapp.com/send?phone=917851891611&text=Hello%20AURX%20WEAR!%20I%20have%20an%20inquiry%20regarding%20products."
+                        onclick="if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) { window.location.href = this.href; return false; }"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="px-4 py-2 rounded-xl bg-aurx-whatsapp hover:bg-emerald-600 text-white text-xs font-heading font-bold uppercase tracking-wider transition shadow-md shadow-emerald-500/20 flex items-center gap-1.5 shrink-0"
+                    >
+                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                        <span>Chat</span>
+                    </a>
+                </div>
+
+                <!-- 3. Gmail / Email -->
+                <div class="bg-[#161620] border border-white/[0.08] hover:border-red-500/40 rounded-2xl p-4 transition group flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="w-11 h-11 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center shrink-0 text-base group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="min-w-0 pr-2">
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-red-400 block font-semibold">Official Gmail / Email</span>
+                            <span class="font-sans font-medium text-xs sm:text-sm text-white block select-all">Dheerajgurjar7788@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <button 
+                            type="button"
+                            onclick="copyToClipboard('Dheerajgurjar7788@gmail.com', this)"
+                            class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-300 hover:text-white text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+                            title="Copy Email"
+                        >
+                            <i class="fa-regular fa-copy text-xs"></i>
+                            <span class="text-[11px]">Copy</span>
+                        </button>
+                        <a 
+                            href="mailto:Dheerajgurjar7788@gmail.com?subject=Inquiry%20-%20AURX%20WEAR"
+                            class="px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-heading font-bold uppercase tracking-wider transition shadow-md flex items-center gap-1.5"
+                        >
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Details -->
+            <div class="pt-2 border-t border-white/[0.08] flex items-center justify-between text-[11px] text-neutral-400 font-mono">
+                <span>DIRECT INQUIRIES & ORDERS</span>
+                <span>ACTIVE MON – SUN</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Contact Navigation Script -->
+    <script>
+        function openContactModal() {
+            window.location.href = '/contact';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            if (!modal) return;
+            document.body.style.overflow = '';
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            const box = modal.querySelector('.contact-box');
+            if (box) {
+                box.classList.remove('scale-100');
+                box.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const origHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-[11px] text-emerald-400 font-semibold">Copied!</span>';
+                setTimeout(() => {
+                    btn.innerHTML = origHTML;
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                const origHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span class="text-[11px] text-emerald-400 font-semibold">Copied!</span>';
+                setTimeout(() => {
+                    btn.innerHTML = origHTML;
+                }, 2000);
+            });
+        }
+    </script>
+
+    <!-- Global Scripts -->
+    <script src="static/js/main.js"></script>
+    
+</body>
+</html>
